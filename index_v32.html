@@ -5,35 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TMN — Gestão de Manutenção</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#0c0e14;--bg2:#12151f;--bg3:#181d2a;--bg4:#1f2535;--bg5:#252d3e;
   --border:#252d3e;--border2:#2e3a50;--border3:#3a4760;
-  --text:#e4eaf6;--text2:#8896b3;--text3:#4a5570;--text4:#2e3a50;
+  --text:#e4eaf6;--text2:#8896b3;--text3:#4a5570;
   --accent:#4f7cff;--accent2:#3a5fd6;--acg:rgba(79,124,255,.15);
   --green:#22c77a;--gbg:rgba(34,199,122,.13);
   --amber:#f5a623;--abg:rgba(245,166,35,.13);
   --red:#ff4f6b;--rbg:rgba(255,79,107,.13);
   --purple:#a78bfa;--pbg:rgba(167,139,250,.13);
   --teal:#2dd4bf;--tbg:rgba(45,212,191,.13);
-  --pink:#f472b6;--pinkbg:rgba(244,114,182,.13);
   --r:8px;--rsm:5px;--rlg:12px;
 }
 html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:13px}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border3);border-radius:2px}
-
-/* LAYOUT */
 .shell{display:flex;height:100vh;overflow:hidden}
 .side{width:230px;min-width:230px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column}
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-
-/* SIDEBAR */
 .side-logo{padding:16px 14px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
 .logo-mark{width:32px;height:32px;background:linear-gradient(135deg,#4f7cff,#a78bfa);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.logo-mark svg{width:18px;height:18px}
 .logo-text{font-size:15px;font-weight:700;letter-spacing:.5px}
 .logo-sub{font-size:10px;color:var(--text3);margin-top:1px}
 .side-scroll{flex:1;overflow-y:auto;padding:8px}
@@ -45,10 +40,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sy
 .nav i{font-size:15px;width:16px;text-align:center;flex-shrink:0}
 .nav span{flex:1;font-size:12px}
 .nbadge{font-size:9px;font-weight:700;background:var(--red);color:#fff;padding:1px 5px;border-radius:10px;min-width:16px;text-align:center}
-.nbadge.am{background:var(--amber)}
-.nbadge.gr{background:var(--green)}
-
-/* PROJECT LIST */
+.nbadge.am{background:var(--amber)}.nbadge.gr{background:var(--green)}
 .proj-row{display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:var(--rsm);cursor:pointer;color:var(--text2);transition:all .12s}
 .proj-row:hover{background:var(--bg3);color:var(--text)}
 .proj-row.on{color:var(--text)}
@@ -57,16 +49,11 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sy
 .pcnt{font-size:10px;color:var(--text3)}
 .add-row{display:flex;align-items:center;gap:7px;padding:6px 9px;cursor:pointer;color:var(--text3);font-size:11px;border-radius:var(--rsm);transition:all .12s}
 .add-row:hover{color:var(--accent);background:var(--acg)}
-
-/* USER */
 .side-foot{padding:10px 8px;border-top:1px solid var(--border)}
 .user-chip{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:var(--rsm)}
 .ava{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#4f7cff,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
 .ava-sm{width:22px;height:22px;font-size:9px}
-.un{font-size:12px;font-weight:500}
-.ur{font-size:10px;color:var(--text3)}
-
-/* TOPBAR */
+.un{font-size:12px;font-weight:500}.ur{font-size:10px;color:var(--text3)}
 .topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 18px;display:flex;align-items:center;gap:10px;height:50px;flex-shrink:0}
 .page-title{font-size:14px;font-weight:600;flex:1}
 .search-wrap{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rsm);padding:5px 10px;width:190px}
@@ -77,16 +64,10 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sy
 .btn.ac{background:var(--accent);border-color:var(--accent2);color:#fff}
 .btn.ac:hover{background:var(--accent2)}
 .btn.sm{padding:4px 9px;font-size:11px}
-.btn.icon{padding:5px 7px;width:30px;height:30px;justify-content:center}
 .vtog{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rsm);overflow:hidden}
 .vt{padding:5px 9px;cursor:pointer;color:var(--text3);transition:all .12s;font-size:12px}
-.vt:hover{color:var(--text)}
-.vt.on{background:var(--bg4);color:var(--text)}
-
-/* CONTENT */
+.vt:hover{color:var(--text)}.vt.on{background:var(--bg4);color:var(--text)}
 .content{flex:1;overflow-y:auto;padding:16px 18px}
-
-/* BOARD */
 .board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .col-hd{display:flex;align-items:center;gap:6px;margin-bottom:8px}
 .col-tt{font-size:11px;font-weight:600}
@@ -94,8 +75,6 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sy
 .col-add{color:var(--text3);cursor:pointer;font-size:15px;transition:color .12s}
 .col-add:hover{color:var(--accent)}
 .col-body{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:8px;min-height:180px}
-
-/* TASK CARD */
 .tc{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 11px;margin-bottom:7px;cursor:pointer;transition:all .12s}
 .tc:hover{border-color:var(--border3);background:var(--bg4)}
 .tc.sel{border-color:var(--accent)}
@@ -105,26 +84,20 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sy
 .tc-cb.dn{background:var(--green);border-color:var(--green)}
 .tc-nm{flex:1;font-size:12px;font-weight:500;line-height:1.4}
 .tc-nm.dn{text-decoration:line-through;color:var(--text3)}
-.ttag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;white-space:nowrap;text-transform:uppercase;letter-spacing:.4px}
+.chip{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.4px}
 .tc-meta{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .prio-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
-.pd-alta{background:var(--red)}
-.pd-media{background:var(--amber)}
-.pd-baixa{background:var(--green)}
+.pd-alta{background:var(--red)}.pd-media{background:var(--amber)}.pd-baixa{background:var(--green)}
 .tc-date{display:flex;align-items:center;gap:2px;font-size:10px}
 .dlate{color:var(--red)}.dsoon{color:var(--amber)}.dok{color:var(--text3)}.ddn{color:var(--green)}
 .tc-proj-tag{display:flex;align-items:center;gap:3px;font-size:10px;color:var(--text2);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tc-metas{display:flex;align-items:center;gap:4px;margin-left:auto}
 .tc-meta-ic{font-size:10px;color:var(--text3);display:flex;align-items:center;gap:2px}
-
-/* LIST */
 .lh{display:grid;grid-template-columns:1fr 80px 100px 85px 85px 30px;gap:8px;padding:5px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);margin-bottom:2px}
 .lr{display:grid;grid-template-columns:1fr 80px 100px 85px 85px 30px;gap:8px;align-items:center;padding:7px 10px;border-radius:var(--rsm);cursor:pointer;transition:background .12s}
 .lr:hover{background:var(--bg2)}
 .lr-nm{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:500;min-width:0}
 .lr-nm span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-
-/* GANTT */
 .gantt-wrap{overflow-x:auto;padding-bottom:4px}
 .gantt-grid{min-width:900px}
 .gantt-head{display:flex;margin-bottom:2px;padding-left:180px}
@@ -136,8 +109,6 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sy
 .gantt-bar{position:absolute;height:100%;border-radius:3px;display:flex;align-items:center;padding-left:6px;font-size:9px;font-weight:600;color:rgba(255,255,255,.9);overflow:hidden;white-space:nowrap;cursor:pointer;transition:opacity .12s}
 .gantt-bar:hover{opacity:.85}
 .gantt-today{position:absolute;top:-2px;bottom:-2px;width:1.5px;background:var(--red);opacity:.7;z-index:2}
-
-/* DETAIL PANEL */
 .detail{width:0;background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transition:width .2s}
 .detail.open{width:340px;min-width:340px}
 .dh{padding:13px 15px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:8px}
@@ -152,8 +123,6 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sy
 .prog-fg{height:100%;border-radius:3px;transition:width .3s}
 .ssel{background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:11px;padding:3px 6px;font-family:inherit;cursor:pointer;outline:none}
 .ssel option{background:var(--bg3)}
-
-/* STEPS / ETAPAS */
 .step-item{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)}
 .step-item:last-child{border-bottom:none}
 .step-cb{width:15px;height:15px;border-radius:50%;border:1.5px solid var(--border3);flex-shrink:0;margin-top:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s}
@@ -163,16 +132,10 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sy
 .step-txt.dn{text-decoration:line-through;color:var(--text3)}
 .step-del{color:var(--text3);cursor:pointer;font-size:12px;opacity:0;transition:opacity .12s}
 .step-item:hover .step-del{opacity:1}
-
-/* ASSIGNEES */
-.assign-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px}
-.assign-chip{display:flex;align-items:center;gap:4px;background:var(--acg);border:1px solid var(--accent);border-radius:20px;padding:3px 8px;font-size:10px;color:var(--accent)}
-.assign-chip .x{cursor:pointer;opacity:.6}
-.assign-chip .x:hover{opacity:1}
+.assign-chip{display:flex;align-items:center;gap:4px;background:var(--acg);border:1px solid var(--accent);border-radius:20px;padding:3px 8px;font-size:10px;color:var(--accent);margin-bottom:6px}
+.assign-chip .x{cursor:pointer;opacity:.6}.assign-chip .x:hover{opacity:1}
 .at-input{background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:11px;padding:4px 8px;font-family:inherit;outline:none;width:100%}
 .at-input:focus{border-color:var(--accent)}
-
-/* COMMENTS */
 .cmt{display:flex;gap:7px;margin-bottom:10px}
 .cbubble{background:var(--bg3);border:1px solid var(--border);border-radius:0 var(--rsm) var(--rsm) var(--rsm);padding:7px 9px;flex:1}
 .cname{font-size:10px;font-weight:600;color:var(--text2)}
@@ -181,14 +144,11 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sy
 .cin-row{display:flex;gap:7px;align-items:flex-end;padding:11px 14px;border-top:1px solid var(--border)}
 .cin-row textarea{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rsm);color:var(--text);font-family:inherit;font-size:11px;padding:6px 8px;resize:none;min-height:32px;max-height:80px;outline:none;transition:border .12s}
 .cin-row textarea:focus{border-color:var(--accent)}
-
-/* MODAL */
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(2px)}
 .ov.hid{display:none}
 .modal{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:20px;width:500px;max-width:95vw;max-height:90vh;overflow-y:auto}
 .mtt{font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.mtt .close{cursor:pointer;color:var(--text3);transition:color .12s}
-.mtt .close:hover{color:var(--text)}
+.mtt .close{cursor:pointer;color:var(--text3)}
 .fg{margin-bottom:12px}
 .fl{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;display:block}
 .fg input,.fg select,.fg textarea{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rsm);color:var(--text);font-family:inherit;font-size:12px;padding:7px 10px;outline:none;transition:border .12s}
@@ -197,18 +157,14 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sy
 .fg textarea{resize:vertical;min-height:55px}
 .fgr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .mfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
-
-/* KPI / INDICADORES */
 .kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
 .kpi{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px}
 .kpi-lbl{font-size:10px;color:var(--text2);margin-bottom:6px;display:flex;align-items:center;gap:4px}
 .kpi-val{font-size:28px;font-weight:700;line-height:1;letter-spacing:-.5px}
 .kpi-sub{font-size:10px;color:var(--text3);margin-top:3px}
 .kv-g{color:var(--green)}.kv-a{color:var(--amber)}.kv-r{color:var(--red)}.kv-b{color:var(--accent)}
-.mini-bar{display:flex;align-items:flex-end;gap:3px;height:40px;margin-top:6px}
-.mb-col{flex:1;border-radius:2px 2px 0 0;min-height:4px;transition:height .4s}
 .ind-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px;margin-bottom:12px}
-.ind-title{font-size:12px;font-weight:600;margin-bottom:10px;color:var(--text)}
+.ind-title{font-size:12px;font-weight:600;margin-bottom:10px}
 .hbar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .hbar-lbl{font-size:11px;color:var(--text2);width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hbar-bg{flex:1;background:var(--bg4);border-radius:3px;height:7px;overflow:hidden}
@@ -218,39 +174,44 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sy
 .donut-leg{flex:1}
 .donut-li{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-size:11px}
 .donut-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-
-/* TOAST */
 .toast-area{position:fixed;bottom:16px;right:16px;z-index:2000;display:flex;flex-direction:column;gap:6px;pointer-events:none}
-.toast{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--text);display:flex;align-items:center;gap:8px;min-width:240px;box-shadow:0 4px 20px rgba(0,0,0,.4);animation:toastin .2s ease;pointer-events:none}
-.toast.go{animation:toastout .3s ease forwards}
-@keyframes toastin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes toastout{to{opacity:0;transform:translateY(8px)}}
-.toast i{font-size:16px}
-
-/* EMAIL SENT BADGE */
-.email-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;background:var(--acg);color:var(--accent);border:1px solid var(--accent);border-radius:10px;padding:1px 6px;margin-left:4px}
-
-/* MISC */
-.empty{text-align:center;padding:40px 16px;color:var(--text3)}
-.empty i{font-size:30px;margin-bottom:8px;display:block;opacity:.3}
-.chip{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.3px}
-.sep{height:1px;background:var(--border);margin:12px 0}
+.toast{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--text);display:flex;align-items:center;gap:8px;min-width:240px;animation:tin .2s ease;pointer-events:none}
+.toast.go{animation:tout .3s ease forwards}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes tout{to{opacity:0;transform:translateY(8px)}}
+.loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:12px}
+.loader-spin{width:36px;height:36px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 .tag-impl{background:var(--acg);color:var(--accent)}
 .tag-prev{background:var(--gbg);color:var(--green)}
 .tag-corr{background:var(--rbg);color:var(--red)}
 .tag-tpm{background:var(--pbg);color:var(--purple)}
 .tag-kz{background:var(--abg);color:var(--amber)}
 .tag-sens{background:var(--tbg);color:var(--teal)}
+.empty{text-align:center;padding:40px 16px;color:var(--text3)}
+.empty i{font-size:30px;margin-bottom:8px;display:block;opacity:.3}
 </style>
 </head>
 <body>
-<div class="shell">
 
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="logo-mark" style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#4f7cff,#a78bfa);display:flex;align-items:center;justify-content:center;margin-bottom:4px">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round">
+      <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+    </svg>
+  </div>
+  <div style="font-size:16px;font-weight:700;color:var(--text)">TMN</div>
+  <div class="loader-spin"></div>
+  <div style="font-size:11px;color:var(--text3)">Conectando ao banco de dados...</div>
+</div>
+
+<div class="shell" id="app" style="display:none">
 <!-- SIDEBAR -->
 <div class="side">
   <div class="side-logo">
     <div class="logo-mark">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round">
         <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
       </svg>
     </div>
@@ -282,14 +243,13 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sy
     <div class="page-title" id="pg-title">Caixa de entrada</div>
     <div class="search-wrap"><i class="ti ti-search" style="font-size:13px;color:var(--text3)"></i><input placeholder="Buscar..." oninput="doSearch(this.value)"></div>
     <div class="vtog" id="vtog">
-      <div class="vt on" id="vt-b" onclick="setLay('board')" title="Kanban"><i class="ti ti-layout-columns"></i></div>
-      <div class="vt" id="vt-l" onclick="setLay('list')" title="Lista"><i class="ti ti-list"></i></div>
+      <div class="vt on" id="vt-b" onclick="setLay('board')"><i class="ti ti-layout-columns"></i></div>
+      <div class="vt" id="vt-l" onclick="setLay('list')"><i class="ti ti-list"></i></div>
     </div>
     <button class="btn ac" onclick="openMod('task')"><i class="ti ti-plus"></i> Nova tarefa</button>
   </div>
   <div style="display:flex;flex:1;overflow:hidden">
     <div class="content" id="content"></div>
-    <!-- DETAIL PANEL -->
     <div class="detail" id="dp">
       <div class="dh">
         <div class="d-title" id="d-title">—</div>
@@ -306,10 +266,10 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sy
 </div>
 </div>
 
-<!-- TOAST AREA -->
+<!-- TOAST -->
 <div class="toast-area" id="ta"></div>
 
-<!-- MODAL TASK -->
+<!-- MODAL TAREFA -->
 <div class="ov hid" id="ov-task" onclick="if(event.target===this)closeMod('task')">
 <div class="modal">
   <div class="mtt">Nova tarefa <span class="close" onclick="closeMod('task')"><i class="ti ti-x"></i></span></div>
@@ -334,7 +294,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sy
   </div>
   <div class="fgr">
     <div class="fg"><label class="fl">Responsável (e-mail)</label><input type="email" id="nt-em" placeholder="email@empresa.com"></div>
-    <div class="fg"><label class="fl">Custo estimado (R$)</label><input type="number" id="nt-cv" placeholder="0,00"></div>
+    <div class="fg"><label class="fl">Custo estimado (R$)</label><input type="number" id="nt-cv" placeholder="0"></div>
   </div>
   <div class="fg"><label class="fl">Equipamento</label>
     <select id="nt-eq">
@@ -344,11 +304,11 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sy
     </select>
   </div>
   <div class="fg"><label class="fl">Descrição</label><textarea id="nt-ds" placeholder="Detalhes, procedimento, referências..."></textarea></div>
-  <div class="fg"><label class="fl">Etapas da tarefa</label>
+  <div class="fg"><label class="fl">Etapas</label>
     <div id="nt-steps-wrap" style="margin-bottom:6px"></div>
-    <input id="nt-step-in" placeholder="Adicionar etapa..." onkeydown="if(event.key==='Enter'){addModalStep()}" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rsm);color:var(--text);font-family:inherit;font-size:12px;padding:7px 10px;outline:none">
+    <input id="nt-step-in" placeholder="Adicionar etapa e pressionar Enter..." onkeydown="if(event.key==='Enter'){event.preventDefault();addModalStep()}" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rsm);color:var(--text);font-family:inherit;font-size:12px;padding:7px 10px;outline:none">
   </div>
-  <div class="mfoot"><button class="btn" onclick="closeMod('task')">Cancelar</button><button class="btn ac" onclick="saveTask()">Criar tarefa</button></div>
+  <div class="mfoot"><button class="btn" onclick="closeMod('task')">Cancelar</button><button class="btn ac" onclick="saveTask()"><i class="ti ti-plus"></i> Criar tarefa</button></div>
 </div>
 </div>
 
@@ -365,66 +325,76 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sy
   </div>
   <div class="fgr">
     <div class="fg"><label class="fl">Data de início</label><input type="date" id="np-st"></div>
-    <div class="fg"><label class="fl">Orçamento (R$)</label><input type="number" id="np-bgt" placeholder="0,00"></div>
+    <div class="fg"><label class="fl">Orçamento (R$)</label><input type="number" id="np-bgt" placeholder="0"></div>
   </div>
   <div class="fg"><label class="fl">Descrição</label><textarea id="np-ds" placeholder="Objetivo e escopo..."></textarea></div>
-  <div class="mfoot"><button class="btn" onclick="closeMod('proj')">Cancelar</button><button class="btn ac" onclick="saveProj()">Criar projeto</button></div>
+  <div class="mfoot"><button class="btn" onclick="closeMod('proj')">Cancelar</button><button class="btn ac" onclick="saveProj()"><i class="ti ti-plus"></i> Criar projeto</button></div>
 </div>
 </div>
 
 <script>
+const SUPABASE_URL = 'https://hsyjdvniuhjtcruiedzg.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhzeWpkdm5pdWhqdGNydWllZHpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1OTUyNjgsImV4cCI6MjA5NzE3MTI2OH0.nyzbaLhxVmCny7LKsB8b49-dWhlh7F6Q0QHfj0zJgC4';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 const $ = id => document.getElementById(id);
-const T = d => new Date(d).toISOString().split('T')[0];
-const today = T(new Date());
-const D = n => { let d = new Date(); d.setDate(d.getDate()+n); return T(d); };
+const today = new Date().toISOString().split('T')[0];
+const D = n => { let d=new Date(); d.setDate(d.getDate()+n); return d.toISOString().split('T')[0]; };
 const BR = s => { if(!s) return '—'; const [y,m,dd]=s.split('-'); return `${dd}/${m}/${y}`; };
 const isLate = s => s && s < today;
 const isSoon = s => { if(!s) return false; return s >= today && s <= D(5); };
 const fmt$ = n => n ? `R$ ${Number(n).toLocaleString('pt-BR',{minimumFractionDigits:2})}` : '—';
 
-const PCOLS = ['#4f7cff','#22c77a','#f5a623','#a78bfa','#2dd4bf','#f472b6','#fb923c'];
-const TMAP = {impl:{l:'Implantação',c:'tag-impl'},prev:{l:'Preventiva',c:'tag-prev'},corr:{l:'Corretiva',c:'tag-corr'},tpm:{l:'TPM',c:'tag-tpm'},kz:{l:'Kaizen',c:'tag-kz'},sens:{l:'Sensitiva',c:'tag-sens'}};
-const COLS = ['A fazer','Em andamento','Concluído'];
-const CDOTS = ['var(--text3)','var(--accent)','var(--green)'];
+const PCOLS=['#4f7cff','#22c77a','#f5a623','#a78bfa','#2dd4bf','#f472b6','#fb923c'];
+const TMAP={impl:{l:'Implantação',c:'tag-impl'},prev:{l:'Preventiva',c:'tag-prev'},corr:{l:'Corretiva',c:'tag-corr'},tpm:{l:'TPM',c:'tag-tpm'},kz:{l:'Kaizen',c:'tag-kz'},sens:{l:'Sensitiva',c:'tag-sens'}};
+const COLS=['A fazer','Em andamento','Concluído'];
+const CDOTS=['var(--text3)','var(--accent)','var(--green)'];
 
-let nid=10, npid=5, selId=null, curV='inbox', curLay='board', curPrj=null, srch='';
-let modalSteps = [];
+let projs=[], tasks=[], etapas=[], comentarios=[];
+let selId=null, curV='inbox', curLay='board', curPrj=null, srch='';
+let modalStepsList=[];
 
-let projs = [
-  {id:1,nm:'Implantação TPM — Linha 01',ct:'TPM',st:D(-60),dt:D(120),ds:'Implantação dos 8 pilares TPM na linha de injetoras.',col:PCOLS[1],bgt:45000},
-  {id:2,nm:'Redução MTTR — Injetoras',ct:'Melhoria Contínua',st:D(-30),dt:D(60),ds:'Padronização de reparo e redução de tempo de intervenção.',col:PCOLS[0],bgt:18000},
-  {id:3,nm:'Revisão Anual ENGEL 650',ct:'Preventiva',st:D(-10),dt:D(45),ds:'Revisão completa conforme SHE-BRA 5.041.',col:PCOLS[2],bgt:12000},
-  {id:4,nm:'Kaizen — Lubrificação Auto.',ct:'Kaizen',st:D(5),dt:D(90),ds:'Automatizar lubrificação das guias lineares.',col:PCOLS[3],bgt:8500},
-];
+// ─── LOAD DATA ───
+async function loadAll() {
+  try {
+    const [rp, rt, re, rc] = await Promise.all([
+      sb.from('projetos').select('*').order('created_at'),
+      sb.from('tarefas').select('*').order('created_at'),
+      sb.from('etapas').select('*').order('ordem'),
+      sb.from('comentarios').select('*').order('created_at'),
+    ]);
+    projs  = rp.data || [];
+    tasks  = rt.data || [];
+    etapas = re.data || [];
+    comentarios = rc.data || [];
+    $('loader').style.display='none';
+    $('app').style.display='flex';
+    render();
+  } catch(e) {
+    $('loader').innerHTML='<div style="color:var(--red);font-size:13px;text-align:center;padding:20px">Erro ao conectar.<br><small>Verifique a URL do Supabase.</small></div>';
+  }
+}
 
-let tasks = [
-  {id:1,nm:'Lubrificar guias lineares — ENGEL 500-01',tp:'prev',pr:'alta',pj:1,eq:'ENGEL DUO 500 - 01',dt:D(-2),ds:'Trimestral conforme plano. Usar graxa Klüber Isoflex NBU 15.',st:'A fazer',em:'tecnico01@tupperware.com.br',cv:350,cmts:[{a:'EP',t:'há 2h',tx:'Material solicitado ao almoxarifado. Número da requisição: 2847.'}],steps:[{txt:'Aplicar LOTO',dn:true},{txt:'Limpar guias com pano seco',dn:true},{txt:'Aplicar graxa Klüber',dn:false},{txt:'Registrar na OS',dn:false}]},
-  {id:2,nm:'Verificar resistências zona 3 e 4',tp:'prev',pr:'media',pj:3,eq:'ENGEL DUO 650 - 01',dt:D(3),ds:'Medir resistência elétrica com megômetro. Comparar com valores de referência.',st:'Em andamento',em:'eletrica@tupperware.com.br',cv:0,cmts:[],steps:[{txt:'Desligar e aplicar LOTO',dn:true},{txt:'Medir resistência com megômetro',dn:false},{txt:'Comparar com referência do fabricante',dn:false},{txt:'Emitir laudo',dn:false}]},
-  {id:3,nm:'Análise de óleo hidráulico — ENGEL 500-02',tp:'prev',pr:'alta',pj:3,eq:'ENGEL DUO 500 - 02',dt:D(-5),ds:'Coletar amostra para laboratório — viscosidade e acidez.',st:'A fazer',em:'',cv:800,cmts:[],steps:[{txt:'Coletar amostra 100ml',dn:false},{txt:'Enviar para laboratório',dn:false},{txt:'Aguardar laudo',dn:false},{txt:'Analisar resultado e agir',dn:false}]},
-  {id:4,nm:'Troca de vedações — cilindro hidráulico',tp:'corr',pr:'alta',pj:2,eq:'ENGEL DUO 650 - 01',dt:D(1),ds:'Vazamento identificado na haste. Aplicar LOTO antes de iniciar.',st:'Em andamento',em:'manut@tupperware.com.br',cv:1200,cmts:[{a:'EP',t:'ontem',tx:'LOTO aplicado. Aguardando peça no almoxarifado — PN 4830.21.'}],steps:[{txt:'Aplicar LOTO completo',dn:true},{txt:'Drenar óleo residual',dn:true},{txt:'Desmontar cilindro',dn:false},{txt:'Instalar kit de vedação novo',dn:false},{txt:'Testar sem pressão',dn:false},{txt:'Pressurizar e verificar',dn:false}]},
-  {id:5,nm:'Auditoria 5S — área de injetoras',tp:'tpm',pr:'media',pj:1,eq:'Geral / Planta',dt:D(5),ds:'Aplicar checklist de auditoria 5S nos 5 sensos.',st:'A fazer',em:'',cv:0,cmts:[],steps:[{txt:'Seiri — utilização',dn:false},{txt:'Seiton — organização',dn:false},{txt:'Seisou — limpeza',dn:false},{txt:'Seiketsu — padronização',dn:false},{txt:'Shitsuke — disciplina',dn:false}]},
-  {id:6,nm:'Calibração sensores de temperatura',tp:'prev',pr:'media',pj:3,eq:'ENGEL DUO 500 - 01',dt:D(30),ds:'Anual — emitir certificado de calibração rastreável. Lab externo.',st:'A fazer',em:'calibracao@lab.com.br',cv:2400,cmts:[],steps:[{txt:'Agendar laboratório externo',dn:false},{txt:'Desconectar sensores',dn:false},{txt:'Enviar para calibração',dn:false},{txt:'Reinstalar e verificar',dn:false},{txt:'Emitir certificado',dn:false}]},
-  {id:7,nm:'Mapeamento de perdas — linha 01',tp:'kz',pr:'baixa',pj:4,eq:'Geral / Planta',dt:D(20),ds:'Identificar perdas crônicas por tipo e frequência.',st:'A fazer',em:'',cv:0,cmts:[],steps:[{txt:'Levantar dados históricos',dn:false},{txt:'Classificar tipos de perda',dn:false},{txt:'Priorizar com Pareto',dn:false},{txt:'Plano de ação',dn:false}]},
-  {id:8,nm:'Treinamento LOTO — equipe manutenção',tp:'impl',pr:'alta',pj:1,eq:'Geral / Planta',dt:D(-15),ds:'Capacitar 6 técnicos no procedimento de bloqueio conforme NR-12.',st:'Concluído',em:'rh@tupperware.com.br',cv:0,cmts:[{a:'EP',t:'há 3d',tx:'Treinamento realizado com 100% de aprovação. Lista de presença arquivada.'}],steps:[{txt:'Preparar material didático',dn:true},{txt:'Agendar sala de treinamento',dn:true},{txt:'Aplicar treinamento teórico',dn:true},{txt:'Prática com LOTO real',dn:true},{txt:'Avaliação final',dn:true}]},
-  {id:9,nm:'Inspeção NR-12 — dispositivos de segurança',tp:'prev',pr:'alta',pj:3,eq:'Geral / Planta',dt:D(-1),ds:'Inspeção anual formal dos dispositivos de segurança conforme NR-12.',st:'Em andamento',em:'she@tupperware.com.br',cv:3500,cmts:[],steps:[{txt:'Verificar grades de segurança',dn:true},{txt:'Testar fins de curso',dn:true},{txt:'Testar botões de emergência',dn:false},{txt:'Emitir relatório NR-12',dn:false}]},
-];
+function taskSteps(tid)  { return etapas.filter(e=>e.tarefa_id===tid).sort((a,b)=>a.ordem-b.ordem); }
+function taskCmts(tid)   { return comentarios.filter(c=>c.tarefa_id===tid).sort((a,b)=>new Date(a.created_at)-new Date(b.created_at)); }
+function projColor(pid)  { const p=projs.find(x=>x.id===pid); return p?p.col:'var(--text3)'; }
+function projName(pid)   { const p=projs.find(x=>x.id===pid); return p?p.nm:''; }
 
 // ─── FILTERS ───
 function getFiltered() {
-  let list = [...tasks];
-  if(srch) list = list.filter(t=>t.nm.toLowerCase().includes(srch.toLowerCase()));
-  if(curV==='hoje') list = list.filter(t=>t.dt===today);
-  else if(curV==='atras') list = list.filter(t=>t.st!=='Concluído'&&isLate(t.dt));
-  else if(curV==='done') list = list.filter(t=>t.st==='Concluído');
-  else if(curV==='prj') list = list.filter(t=>t.pj===curPrj);
-  else list = list.filter(t=>t.st!=='Concluído');
+  let list=[...tasks];
+  if(srch) list=list.filter(t=>t.nm.toLowerCase().includes(srch.toLowerCase()));
+  if(curV==='hoje')  list=list.filter(t=>t.dt===today);
+  else if(curV==='atras') list=list.filter(t=>t.st!=='Concluído'&&isLate(t.dt));
+  else if(curV==='done')  list=list.filter(t=>t.st==='Concluído');
+  else if(curV==='prj')   list=list.filter(t=>t.pj===curPrj);
+  else list=list.filter(t=>t.st!=='Concluído');
   return list;
 }
 
 // ─── RENDER ───
 function render() {
-  updateBadges();
-  renderSideProjs();
+  updateBadges(); renderSideProjs();
   if(curV==='gantt'){renderGantt();return;}
   if(curV==='kpi'){renderKPI();return;}
   curLay==='board'?renderBoard():renderList();
@@ -441,10 +411,10 @@ function updateBadges() {
 }
 
 function renderSideProjs() {
-  $('side-projs').innerHTML = projs.map(p=>{
+  $('side-projs').innerHTML=projs.map(p=>{
     const cnt=tasks.filter(t=>t.pj===p.id&&t.st!=='Concluído').length;
     const on=curV==='prj'&&curPrj===p.id;
-    return `<div class="proj-row${on?' on':''}" onclick="goProj(${p.id})">
+    return`<div class="proj-row${on?' on':''}" onclick="goProj('${p.id}')">
       <div class="pdot" style="background:${p.col}"></div>
       <span class="pname">${p.nm}</span>
       ${cnt?`<span class="pcnt">${cnt}</span>`:''}
@@ -452,28 +422,16 @@ function renderSideProjs() {
   }).join('');
 }
 
-// ─── BOARD ───
-function renderBoard() {
-  const list=getFiltered();
-  $('vtog').style.display='flex';
-  $('content').innerHTML='<div class="board">'+COLS.map((col,ci)=>{
-    const items=list.filter(t=>t.st===col);
-    return`<div>
-      <div class="col-hd"><div class="pdot" style="background:${CDOTS[ci]};width:7px;height:7px;border-radius:50%"></div><span class="col-tt">${col}</span><span class="col-cc">${items.length}</span><span class="col-add" onclick="openMod('task')"><i class="ti ti-plus"></i></span></div>
-      <div class="col-body">${items.length?items.map(tCard).join(''):'<div class="empty" style="padding:18px 8px"><i class="ti ti-inbox"></i><div style="font-size:11px">Nenhuma</div></div>'}</div>
-    </div>`;
-  }).join('')+'</div>';
-}
-
 function tCard(t) {
   const m=TMAP[t.tp]||{l:t.tp,c:'tag-impl'};
   const pn=projs.find(p=>p.id===t.pj);
   const dc=t.st==='Concluído'?'ddn':isLate(t.dt)?'dlate':isSoon(t.dt)?'dsoon':'dok';
   const di=t.st==='Concluído'?'ti-check':isLate(t.dt)?'ti-alert-circle':'ti-calendar';
-  const stsDone=t.steps.filter(s=>s.dn).length; const stsAll=t.steps.length;
-  return`<div class="tc${selId===t.id?' sel':''}" id="tc${t.id}" onclick="selTask(${t.id})">
+  const steps=taskSteps(t.id); const cmts=taskCmts(t.id);
+  const stsDone=steps.filter(s=>s.dn).length;
+  return`<div class="tc${selId===t.id?' sel':''}" onclick="selTask('${t.id}')">
     <div class="tc-top">
-      <div class="tc-cb${t.st==='Concluído'?' dn':''}" onclick="event.stopPropagation();toggleDone(${t.id})">
+      <div class="tc-cb${t.st==='Concluído'?' dn':''}" onclick="event.stopPropagation();toggleDone('${t.id}')">
         ${t.st==='Concluído'?'<i class="ti ti-check" style="font-size:8px;color:#fff"></i>':''}
       </div>
       <div class="tc-nm${t.st==='Concluído'?' dn':''}">${t.nm}</div>
@@ -484,107 +442,99 @@ function tCard(t) {
       ${pn?`<div class="tc-proj-tag"><span class="pdot" style="background:${pn.col}"></span>${pn.nm.split('—')[0].trim()}</div>`:''}
       ${t.dt?`<div class="tc-date ${dc}"><i class="ti ${di}" style="font-size:9px"></i> ${BR(t.dt)}</div>`:''}
       <div class="tc-metas">
-        ${t.cmts.length?`<span class="tc-meta-ic"><i class="ti ti-message-circle"></i>${t.cmts.length}</span>`:''}
-        ${stsAll?`<span class="tc-meta-ic"><i class="ti ti-checklist"></i>${stsDone}/${stsAll}</span>`:''}
+        ${cmts.length?`<span class="tc-meta-ic"><i class="ti ti-message-circle"></i>${cmts.length}</span>`:''}
+        ${steps.length?`<span class="tc-meta-ic"><i class="ti ti-checklist"></i>${stsDone}/${steps.length}</span>`:''}
         ${t.em?`<span class="tc-meta-ic" title="${t.em}"><i class="ti ti-mail"></i></span>`:''}
       </div>
     </div>
   </div>`;
 }
 
-// ─── LIST ───
-function renderList() {
-  const list=getFiltered();
+function renderBoard() {
   $('vtog').style.display='flex';
+  const list=getFiltered();
+  $('content').innerHTML='<div class="board">'+COLS.map((col,ci)=>{
+    const items=list.filter(t=>t.st===col);
+    return`<div>
+      <div class="col-hd"><div class="pdot" style="background:${CDOTS[ci]};width:7px;height:7px;border-radius:50%"></div><span class="col-tt">${col}</span><span class="col-cc">${items.length}</span><span class="col-add" onclick="openMod('task')"><i class="ti ti-plus"></i></span></div>
+      <div class="col-body">${items.length?items.map(tCard).join(''):'<div class="empty" style="padding:18px 8px"><i class="ti ti-inbox"></i><div style="font-size:11px">Nenhuma</div></div>'}</div>
+    </div>`;
+  }).join('')+'</div>';
+}
+
+function renderList() {
+  $('vtog').style.display='flex';
+  const list=getFiltered();
   if(!list.length){$('content').innerHTML='<div class="empty"><i class="ti ti-inbox"></i>Nenhuma tarefa</div>';return;}
   $('content').innerHTML=`<div class="lh"><div>Tarefa</div><div>Projeto</div><div>Data limite</div><div>Tipo</div><div>Status</div><div></div></div>`+
-  list.map(t=>{
-    const m=TMAP[t.tp]||{l:t.tp,c:'tag-impl'};
-    const pn=projs.find(p=>p.id===t.pj);
-    const dc=t.st==='Concluído'?'ddn':isLate(t.dt)?'dlate':isSoon(t.dt)?'dsoon':'dok';
-    return`<div class="lr" onclick="selTask(${t.id})">
-      <div class="lr-nm">
-        <div class="tc-cb${t.st==='Concluído'?' dn':''}" onclick="event.stopPropagation();toggleDone(${t.id})">
-          ${t.st==='Concluído'?'<i class="ti ti-check" style="font-size:8px;color:#fff"></i>':''}
+    list.map(t=>{
+      const m=TMAP[t.tp]||{l:t.tp,c:'tag-impl'};
+      const pn=projs.find(p=>p.id===t.pj);
+      const dc=t.st==='Concluído'?'ddn':isLate(t.dt)?'dlate':isSoon(t.dt)?'dsoon':'dok';
+      return`<div class="lr" onclick="selTask('${t.id}')">
+        <div class="lr-nm">
+          <div class="tc-cb${t.st==='Concluído'?' dn':''}" onclick="event.stopPropagation();toggleDone('${t.id}')">
+            ${t.st==='Concluído'?'<i class="ti ti-check" style="font-size:8px;color:#fff"></i>':''}
+          </div>
+          <span style="${t.st==='Concluído'?'text-decoration:line-through;color:var(--text3)':''}">${t.nm}</span>
         </div>
-        <span style="${t.st==='Concluído'?'text-decoration:line-through;color:var(--text3)':''}">${t.nm}</span>
-        ${t.em?`<i class="ti ti-mail" style="font-size:11px;color:var(--text3)" title="${t.em}"></i>`:''}
-      </div>
-      <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)">${pn?`<span class="pdot" style="background:${pn.col}"></span>${pn.nm.split('—')[0].trim()}`:'—'}</div>
-      <div class="tc-date ${dc}" style="font-size:11px">${t.dt?`<i class="ti ti-calendar" style="font-size:10px"></i> ${BR(t.dt)}`:'—'}</div>
-      <span class="chip ${m.c}" style="font-size:9px">${m.l}</span>
-      <div style="font-size:11px;color:var(--text2)">${t.st}</div>
-      <div class="prio-dot pd-${t.pr}" style="margin:0 auto"></div>
-    </div>`;
-  }).join('');
+        <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)">${pn?`<span class="pdot" style="background:${pn.col}"></span>${pn.nm.split('—')[0].trim()}`:'—'}</div>
+        <div class="tc-date ${dc}" style="font-size:11px">${t.dt?`<i class="ti ti-calendar" style="font-size:10px"></i> ${BR(t.dt)}`:'—'}</div>
+        <span class="chip ${m.c}">${m.l}</span>
+        <div style="font-size:11px;color:var(--text2)">${t.st}</div>
+        <div class="prio-dot pd-${t.pr}" style="margin:0 auto"></div>
+      </div>`;
+    }).join('');
 }
 
-// ─── GANTT ───
 function renderGantt() {
   $('vtog').style.display='none';
-  const yr = new Date().getFullYear();
-  const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  const yearStart = new Date(yr,0,1);
-  const yearEnd = new Date(yr,11,31);
-  const totalDays = (yearEnd-yearStart)/86400000+1;
-  const pct = d => { if(!d) return 0; const dd=new Date(d); return Math.max(0,Math.min(100,((dd-yearStart)/86400000)/totalDays*100)); };
-
-  const todayPct = pct(today);
-
-  const rows = projs.map(p=>{
-    const sp = pct(p.st); const ep = pct(p.dt);
-    const w = Math.max(ep-sp,1);
-    const ptasks = tasks.filter(t=>t.pj===p.id);
-    const done = ptasks.filter(t=>t.st==='Concluído').length;
-    const prog = ptasks.length ? Math.round(done/ptasks.length*100) : 0;
-    return `<div class="gantt-row">
-      <div class="gantt-lbl" onclick="goProj(${p.id})" title="${p.nm}"><i class="ti ti-folder" style="font-size:11px;margin-right:4px;color:${p.col}"></i>${p.nm}</div>
+  const yr=new Date().getFullYear();
+  const months=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  const yStart=new Date(yr,0,1); const total=(new Date(yr,11,31)-yStart)/86400000+1;
+  const pct=d=>{if(!d)return 0;return Math.max(0,Math.min(100,((new Date(d)-yStart)/86400000)/total*100));};
+  const todayPct=pct(today);
+  const rows=projs.map(p=>{
+    const sp=pct(p.st);const ep=pct(p.dt);const w=Math.max(ep-sp,1);
+    const pt=tasks.filter(t=>t.pj===p.id);
+    const prog=pt.length?Math.round(pt.filter(t=>t.st==='Concluído').length/pt.length*100):0;
+    return`<div class="gantt-row">
+      <div class="gantt-lbl" onclick="goProj('${p.id}')" title="${p.nm}"><i class="ti ti-folder" style="font-size:11px;margin-right:4px;color:${p.col}"></i>${p.nm}</div>
       <div class="gantt-track">
         <div class="gantt-today" style="left:${todayPct}%"></div>
-        <div class="gantt-bar" style="left:${sp}%;width:${w}%;background:${p.col};" onclick="goProj(${p.id})" title="${p.nm} — ${prog}% concluído">
-          ${w>8?`${prog}%`:''}
-        </div>
+        <div class="gantt-bar" style="left:${sp}%;width:${w}%;background:${p.col}" title="${p.nm} — ${prog}% concluído">${w>8?prog+'%':''}</div>
       </div>
     </div>`;
   }).join('');
-
-  const taskRows = tasks.filter(t=>t.dt).map(t=>{
-    const tp=pct(t.dt); const w=1.5;
-    const m=TMAP[t.tp]||{l:t.tp,c:'tag-impl'};
+  const trows=tasks.filter(t=>t.dt).map(t=>{
+    const tp=pct(t.dt);
     const col={impl:'#4f7cff',prev:'#22c77a',corr:'#ff4f6b',tpm:'#a78bfa',kz:'#f5a623',sens:'#2dd4bf'}[t.tp]||'#4f7cff';
     return`<div class="gantt-row" style="min-height:22px">
-      <div class="gantt-lbl" onclick="selTask(${t.id})" style="font-size:10px" title="${t.nm}"><span style="margin-left:14px;color:var(--text3)">↳</span> ${t.nm}</div>
+      <div class="gantt-lbl" onclick="selTask('${t.id}')" style="font-size:10px" title="${t.nm}"><span style="margin-left:12px;color:var(--text3)">↳</span> ${t.nm}</div>
       <div class="gantt-track" style="height:16px">
         <div class="gantt-today" style="left:${todayPct}%"></div>
-        <div class="gantt-bar" style="left:${Math.max(0,tp-.7)}%;width:${w}%;background:${col};border-radius:3px" onclick="selTask(${t.id})" title="${t.nm} — ${BR(t.dt)}"></div>
+        <div class="gantt-bar" style="left:${Math.max(0,tp-.7)}%;width:1.5%;background:${col};border-radius:3px" onclick="selTask('${t.id}')" title="${t.nm} — ${BR(t.dt)}"></div>
       </div>
     </div>`;
   }).join('');
-
   $('content').innerHTML=`
-  <div style="margin-bottom:12px;display:flex;align-items:center;gap:10px">
-    <span style="font-size:13px;font-weight:600">Cronograma ${yr}</span>
-    <span style="font-size:10px;color:var(--text3);display:flex;align-items:center;gap:4px"><span style="width:1.5px;height:12px;background:var(--red);display:inline-block;border-radius:1px"></span>Hoje ${BR(today)}</span>
-    <div style="display:flex;gap:8px;margin-left:auto;flex-wrap:wrap">
-      ${Object.entries({impl:'#4f7cff',prev:'#22c77a',corr:'#ff4f6b',tpm:'#a78bfa',kz:'#f5a623',sens:'#2dd4bf'}).map(([k,c])=>`<span style="font-size:10px;display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:${c};display:inline-block"></span>${TMAP[k]?.l}</span>`).join('')}
+    <div style="margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="font-size:13px;font-weight:600">Cronograma ${yr}</span>
+      <span style="font-size:10px;color:var(--text3);display:flex;align-items:center;gap:4px"><span style="width:1.5px;height:12px;background:var(--red);display:inline-block"></span>Hoje ${BR(today)}</span>
     </div>
-  </div>
-  <div class="gantt-wrap">
-    <div class="gantt-grid">
+    <div class="gantt-wrap"><div class="gantt-grid">
       <div class="gantt-head">${months.map(m=>`<div class="gantt-month">${m}</div>`).join('')}</div>
       <div style="margin-bottom:12px">
-        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;padding:4px 0 8px 0;border-bottom:1px solid var(--border);margin-bottom:8px">Projetos</div>
-        ${rows}
+        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;padding:4px 0 8px;border-bottom:1px solid var(--border);margin-bottom:8px">Projetos</div>
+        ${rows||'<div class="empty" style="padding:16px">Nenhum projeto cadastrado</div>'}
       </div>
       <div>
-        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;padding:4px 0 8px 0;border-bottom:1px solid var(--border);margin-bottom:8px">Tarefas com prazo</div>
-        ${taskRows}
+        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;padding:4px 0 8px;border-bottom:1px solid var(--border);margin-bottom:8px">Tarefas</div>
+        ${trows||'<div class="empty" style="padding:16px">Nenhuma tarefa com prazo</div>'}
       </div>
-    </div>
-  </div>`;
+    </div></div>`;
 }
 
-// ─── KPI ───
 function renderKPI() {
   $('vtog').style.display='none';
   const done=tasks.filter(t=>t.st==='Concluído').length;
@@ -599,109 +549,72 @@ function renderKPI() {
     const pd=pt.filter(t=>t.st==='Concluído').length;
     return{nm:p.nm.split('—')[0].trim(),col:p.col,done:pd,total:pt.length,pct:pt.length?Math.round(pd/pt.length*100):0};
   });
-
   $('content').innerHTML=`
-  <div class="kpi-grid">
-    <div class="kpi"><div class="kpi-lbl"><i class="ti ti-checklist" style="font-size:12px"></i> Conclusão geral</div><div class="kpi-val kv-b">${total?Math.round(done/total*100):0}%</div><div class="kpi-sub">${done} de ${total} tarefas</div></div>
-    <div class="kpi"><div class="kpi-lbl"><i class="ti ti-alert-circle" style="font-size:12px"></i> Atrasadas</div><div class="kpi-val ${late?'kv-r':'kv-g'}">${late}</div><div class="kpi-sub">${late?'requerem atenção':'tudo em dia'}</div></div>
-    <div class="kpi"><div class="kpi-lbl"><i class="ti ti-circle-check" style="font-size:12px"></i> Concluídas</div><div class="kpi-val kv-g">${done}</div><div class="kpi-sub">esse período</div></div>
-    <div class="kpi"><div class="kpi-lbl"><i class="ti ti-currency-dollar" style="font-size:12px"></i> Custo estimado</div><div class="kpi-val kv-a" style="font-size:18px">R$ ${totalCost.toLocaleString('pt-BR')}</div><div class="kpi-sub">total das tarefas</div></div>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-    <div class="ind-card">
-      <div class="ind-title">Tarefas por tipo</div>
-      <div class="mini-bar" style="height:80px;margin-bottom:8px">
-        ${Object.entries(byType).map(([k,v])=>`<div class="mb-col" style="height:${v/maxT*100}%;background:${{impl:'#4f7cff',prev:'#22c77a',corr:'#ff4f6b',tpm:'#a78bfa',kz:'#f5a623',sens:'#2dd4bf'}[k]}" title="${TMAP[k]?.l}: ${v}"></div>`).join('')}
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-lbl"><i class="ti ti-checklist" style="font-size:12px"></i>Conclusão geral</div><div class="kpi-val kv-b">${total?Math.round(done/total*100):0}%</div><div class="kpi-sub">${done} de ${total} tarefas</div></div>
+      <div class="kpi"><div class="kpi-lbl"><i class="ti ti-alert-circle" style="font-size:12px"></i>Atrasadas</div><div class="kpi-val ${late?'kv-r':'kv-g'}">${late}</div><div class="kpi-sub">${late?'requerem atenção':'tudo em dia'}</div></div>
+      <div class="kpi"><div class="kpi-lbl"><i class="ti ti-circle-check" style="font-size:12px"></i>Concluídas</div><div class="kpi-val kv-g">${done}</div><div class="kpi-sub">no total</div></div>
+      <div class="kpi"><div class="kpi-lbl"><i class="ti ti-currency-dollar" style="font-size:12px"></i>Custo estimado</div><div class="kpi-val kv-a" style="font-size:16px">R$ ${totalCost.toLocaleString('pt-BR')}</div><div class="kpi-sub">soma das tarefas</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+      <div class="ind-card">
+        <div class="ind-title">Tarefas por tipo</div>
+        ${Object.entries(byType).map(([k,v])=>`<div class="hbar-row"><div class="hbar-lbl">${TMAP[k]?.l}</div><div class="hbar-bg"><div class="hbar-fg" style="width:${v/maxT*100}%;background:${{impl:'#4f7cff',prev:'#22c77a',corr:'#ff4f6b',tpm:'#a78bfa',kz:'#f5a623',sens:'#2dd4bf'}[k]}"></div></div><div class="hbar-val">${v}</div></div>`).join('')}
       </div>
-      ${Object.entries(byType).map(([k,v])=>`
-        <div class="hbar-row">
-          <div class="hbar-lbl">${TMAP[k]?.l}</div>
-          <div class="hbar-bg"><div class="hbar-fg" style="width:${v/maxT*100}%;background:${{impl:'#4f7cff',prev:'#22c77a',corr:'#ff4f6b',tpm:'#a78bfa',kz:'#f5a623',sens:'#2dd4bf'}[k]}"></div></div>
-          <div class="hbar-val">${v}</div>
-        </div>`).join('')}
+      <div class="ind-card">
+        <div class="ind-title">Progresso por projeto</div>
+        ${byProj.map(p=>`<div class="hbar-row"><div class="hbar-lbl" style="display:flex;align-items:center;gap:4px"><span class="pdot" style="background:${p.col}"></span>${p.nm}</div><div class="hbar-bg"><div class="hbar-fg" style="width:${p.pct}%;background:${p.col}"></div></div><div class="hbar-val">${p.pct}%</div></div>`).join('')||'<div class="empty" style="padding:12px">Sem projetos</div>'}
+      </div>
     </div>
     <div class="ind-card">
-      <div class="ind-title">Progresso por projeto</div>
-      ${byProj.map(p=>`
-        <div class="hbar-row" style="margin-bottom:10px">
-          <div class="hbar-lbl" style="display:flex;align-items:center;gap:4px"><span class="pdot" style="background:${p.col}"></span>${p.nm}</div>
-          <div class="hbar-bg"><div class="hbar-fg" style="width:${p.pct}%;background:${p.col}"></div></div>
-          <div class="hbar-val">${p.pct}%</div>
-        </div>`).join('')}
-    </div>
-  </div>
-  <div class="ind-card">
-    <div class="ind-title">Status das tarefas</div>
-    <div class="donut-wrap">
-      <div>
-        <svg width="110" height="110" viewBox="0 0 110 110">
-          ${(()=>{
-            const data=[{l:'Concluído',v:done,c:'#22c77a'},{l:'Em andamento',v:tasks.filter(t=>t.st==='Em andamento').length,c:'#4f7cff'},{l:'A fazer',v:tasks.filter(t=>t.st==='A fazer').length,c:'#252d3e'}];
-            const tot=data.reduce((s,d)=>s+d.v,0)||1;
-            let offset=0;
-            return data.map(d=>{
-              const pct=d.v/tot;
-              const dash=pct*251.2;
-              const svg=`<circle cx="55" cy="55" r="40" fill="none" stroke="${d.c}" stroke-width="18" stroke-dasharray="${dash} ${251.2-dash}" stroke-dashoffset="${-offset}" transform="rotate(-90 55 55)"/>`;
-              offset+=dash;
-              return svg;
-            }).join('');
-          })()}
-          <text x="55" y="60" text-anchor="middle" fill="#e4eaf6" font-size="18" font-weight="700">${total?Math.round(done/total*100):0}%</text>
+      <div class="ind-title">Status das tarefas</div>
+      <div class="donut-wrap">
+        <svg width="100" height="100" viewBox="0 0 100 100">
+          ${(()=>{const data=[{v:done,c:'#22c77a'},{v:tasks.filter(t=>t.st==='Em andamento').length,c:'#4f7cff'},{v:tasks.filter(t=>t.st==='A fazer').length,c:'#252d3e'}];const tot=data.reduce((s,d)=>s+d.v,0)||1;let off=0;return data.map(d=>{const dash=d.v/tot*251.2;const svg=`<circle cx="50" cy="50" r="40" fill="none" stroke="${d.c}" stroke-width="16" stroke-dasharray="${dash} ${251.2-dash}" stroke-dashoffset="${-off}" transform="rotate(-90 50 50)"/>`;off+=dash;return svg;}).join('');})()}
+          <text x="50" y="55" text-anchor="middle" fill="#e4eaf6" font-size="16" font-weight="700">${total?Math.round(done/total*100):0}%</text>
         </svg>
+        <div class="donut-leg">
+          ${[{l:'Concluído',v:done,c:'#22c77a'},{l:'Em andamento',v:tasks.filter(t=>t.st==='Em andamento').length,c:'#4f7cff'},{l:'A fazer',v:tasks.filter(t=>t.st==='A fazer').length,c:'#3a4760'}].map(d=>`<div class="donut-li"><div class="donut-dot" style="background:${d.c}"></div>${d.l}<strong style="margin-left:auto">${d.v}</strong></div>`).join('')}
+        </div>
       </div>
-      <div class="donut-leg">
-        ${[{l:'Concluído',v:done,c:'#22c77a'},{l:'Em andamento',v:tasks.filter(t=>t.st==='Em andamento').length,c:'#4f7cff'},{l:'A fazer',v:tasks.filter(t=>t.st==='A fazer').length,c:'#3a4760'}].map(d=>
-          `<div class="donut-li"><div class="donut-dot" style="background:${d.c}"></div>${d.l} <strong style="margin-left:auto">${d.v}</strong></div>`
-        ).join('')}
-        ${late?`<div class="donut-li" style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border)"><div class="donut-dot" style="background:var(--red)"></div>Atrasadas <strong style="margin-left:auto;color:var(--red)">${late}</strong></div>`:''}
-      </div>
-    </div>
-  </div>`;
+    </div>`;
 }
 
 // ─── DETAIL PANEL ───
 function selTask(id) {
-  selId=id;
-  const dp=$('dp');
-  dp.classList.add('open');
-  renderDetail();
-  render();
+  selId=id; $('dp').classList.add('open');
+  renderDetail(); render();
 }
 function closeDP() {
-  selId=null;
-  $('dp').classList.remove('open');
-  render();
+  selId=null; $('dp').classList.remove('open'); render();
 }
 function renderDetail() {
-  const t=tasks.find(x=>x.id===selId);
-  if(!t) return;
-  $('d-title').textContent=t.nm;
+  const t=tasks.find(x=>x.id===selId); if(!t) return;
   const m=TMAP[t.tp]||{l:t.tp,c:'tag-impl'};
   const pn=projs.find(p=>p.id===t.pj);
-  const stsDone=t.steps.filter(s=>s.dn).length;
-  const prog=t.steps.length?Math.round(stsDone/t.steps.length*100):t.st==='Concluído'?100:0;
+  const steps=taskSteps(t.id); const cmts=taskCmts(t.id);
+  const stsDone=steps.filter(s=>s.dn).length;
+  const prog=steps.length?Math.round(stsDone/steps.length*100):t.st==='Concluído'?100:0;
   const progCol=t.st==='Concluído'?'var(--green)':prog>50?'var(--accent)':'var(--amber)';
+  $('d-title').textContent=t.nm;
   $('d-body').innerHTML=`
     <div class="ds">
       <div class="dl">Detalhes</div>
       <div class="dr"><span class="drl">Tipo</span><span class="chip ${m.c}">${m.l}</span></div>
       <div class="dr"><span class="drl">Prioridade</span><span class="drv" style="display:flex;align-items:center;gap:5px"><span class="prio-dot pd-${t.pr}"></span>${{alta:'Alta',media:'Média',baixa:'Baixa'}[t.pr]}</span></div>
       <div class="dr"><span class="drl">Status</span>
-        <select class="ssel" onchange="chgSt(${t.id},this.value)">
+        <select class="ssel" onchange="chgSt('${t.id}',this.value)">
           ${COLS.map(s=>`<option${s===t.st?' selected':''}>${s}</option>`).join('')}
         </select>
       </div>
       <div class="dr"><span class="drl">Data limite</span><span class="drv ${t.st==='Concluído'?'ddn':isLate(t.dt)?'dlate':isSoon(t.dt)?'dsoon':'dok'}">${BR(t.dt)}</span></div>
       ${pn?`<div class="dr"><span class="drl">Projeto</span><span class="drv" style="display:flex;align-items:center;gap:4px"><span class="pdot" style="background:${pn.col}"></span>${pn.nm}</span></div>`:''}
-      <div class="dr"><span class="drl">Equipamento</span><span class="drv">${t.eq}</span></div>
+      <div class="dr"><span class="drl">Equipamento</span><span class="drv">${t.eq||'—'}</span></div>
       ${t.cv?`<div class="dr"><span class="drl">Custo est.</span><span class="drv">${fmt$(t.cv)}</span></div>`:''}
       <div class="dr"><span class="drl">Responsável</span>
         <div style="flex:1">
-          <div class="assign-row" id="assign-row-${t.id}">
-            ${t.em?`<div class="assign-chip"><i class="ti ti-mail" style="font-size:9px"></i>${t.em}<span class="x" onclick="removeAssign(${t.id})">×</span></div>`:''}
-          </div>
-          <input class="at-input" placeholder="email@empresa.com" id="at-in-${t.id}" onkeydown="if(event.key==='Enter')addAssign(${t.id})">
+          ${t.em?`<div class="assign-chip"><i class="ti ti-mail" style="font-size:9px"></i>${t.em}<span class="x" onclick="removeAssign('${t.id}')">×</span></div>`:''}
+          <input class="at-input" placeholder="adicionar email..." id="at-${t.id}" onkeydown="if(event.key==='Enter')addAssign('${t.id}')">
         </div>
       </div>
       <div class="dr"><span class="drl">Progresso</span>
@@ -713,101 +626,116 @@ function renderDetail() {
     </div>
     ${t.ds?`<div class="ds"><div class="dl">Descrição</div><div style="font-size:12px;color:var(--text2);line-height:1.6">${t.ds}</div></div>`:''}
     <div class="ds">
-      <div class="dl">Etapas <span style="font-weight:400;color:var(--text3)">${stsDone}/${t.steps.length}</span></div>
-      <div id="steps-${t.id}">
-        ${t.steps.map((s,i)=>`
-          <div class="step-item">
-            <div class="step-cb${s.dn?' dn':''}" onclick="toggleStep(${t.id},${i})">
-              ${s.dn?'<i class="ti ti-check" style="font-size:8px;color:#fff"></i>':''}
-            </div>
-            <span class="step-txt${s.dn?' dn':''}">${s.txt}</span>
-            <span class="step-del" onclick="delStep(${t.id},${i})"><i class="ti ti-x"></i></span>
-          </div>`).join('')}
+      <div class="dl">Etapas <span style="font-weight:400;color:var(--text3)">${stsDone}/${steps.length}</span></div>
+      <div id="steps-wrap">
+        ${steps.map(s=>`<div class="step-item">
+          <div class="step-cb${s.dn?' dn':''}" onclick="toggleStep('${s.id}','${t.id}')">
+            ${s.dn?'<i class="ti ti-check" style="font-size:8px;color:#fff"></i>':''}
+          </div>
+          <span class="step-txt${s.dn?' dn':''}">${s.txt}</span>
+          <span class="step-del" onclick="delStep('${s.id}','${t.id}')"><i class="ti ti-x"></i></span>
+        </div>`).join('')}
       </div>
       <div style="display:flex;gap:6px;margin-top:6px">
-        <input id="step-in-${t.id}" placeholder="Nova etapa..." style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:inherit;font-size:11px;padding:5px 8px;outline:none" onkeydown="if(event.key==='Enter')addStep(${t.id})">
-        <button class="btn sm" onclick="addStep(${t.id})"><i class="ti ti-plus"></i></button>
+        <input id="step-in" placeholder="Nova etapa..." style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:inherit;font-size:11px;padding:5px 8px;outline:none" onkeydown="if(event.key==='Enter')addStep('${t.id}')">
+        <button class="btn sm" onclick="addStep('${t.id}')"><i class="ti ti-plus"></i></button>
       </div>
     </div>
     <div class="ds">
-      <div class="dl">Comentários ${t.cmts.length?`(${t.cmts.length})`:''}  </div>
-      ${t.cmts.length?t.cmts.map(c=>`
-        <div class="cmt">
-          <div class="ava ava-sm">${c.a}</div>
-          <div class="cbubble">
-            <div><span class="cname">${c.a}</span><span class="ctime">${c.t}</span></div>
-            <div class="ctxt">${c.tx}</div>
-          </div>
-        </div>`).join(''):'<div style="font-size:11px;color:var(--text3);padding:2px 0">Nenhum comentário ainda.</div>'}
+      <div class="dl">Comentários ${cmts.length?`(${cmts.length})`:''}</div>
+      ${cmts.length?cmts.map(c=>`<div class="cmt">
+        <div class="ava ava-sm">${c.autor.substring(0,2).toUpperCase()}</div>
+        <div class="cbubble">
+          <div><span class="cname">${c.autor}</span><span class="ctime">${new Date(c.created_at).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</span></div>
+          <div class="ctxt">${c.tx}</div>
+        </div>
+      </div>`).join(''):'<div style="font-size:11px;color:var(--text3);padding:2px 0">Nenhum comentário.</div>'}
     </div>`;
 }
 
-function addCmt() {
-  const inp=$('cin'); const txt=inp.value.trim();
-  if(!txt||!selId) return;
-  const t=tasks.find(x=>x.id===selId); if(!t) return;
-  t.cmts.push({a:'EP',t:'agora',tx:txt}); inp.value='';
-  renderDetail(); render();
-}
-function toggleDone(id) {
+// ─── ACTIONS ───
+async function toggleDone(id) {
   const t=tasks.find(x=>x.id===id); if(!t) return;
-  t.st=t.st==='Concluído'?'A fazer':'Concluído';
+  const ns=t.st==='Concluído'?'A fazer':'Concluído';
+  const {error}=await sb.from('tarefas').update({st:ns}).eq('id',id);
+  if(error){toast('Erro ao salvar','ti-alert-circle','var(--red)');return;}
+  t.st=ns;
   if(selId===id) renderDetail();
   render(); toast('Tarefa atualizada','ti-check','var(--green)');
 }
-function chgSt(id,val) {
-  const t=tasks.find(x=>x.id===id); if(!t) return;
-  t.st=val; renderDetail(); render();
-  toast('Status: '+val,'ti-refresh','var(--accent)');
-}
-function toggleStep(id,i) {
-  const t=tasks.find(x=>x.id===id); if(!t) return;
-  t.steps[i].dn=!t.steps[i].dn; renderDetail(); render();
-}
-function delStep(id,i) {
-  const t=tasks.find(x=>x.id===id); if(!t) return;
-  t.steps.splice(i,1); renderDetail();
-}
-function addStep(id) {
-  const t=tasks.find(x=>x.id===id); if(!t) return;
-  const inp=$(`step-in-${id}`); if(!inp||!inp.value.trim()) return;
-  t.steps.push({txt:inp.value.trim(),dn:false}); inp.value=''; renderDetail(); render();
-}
-function addAssign(id) {
-  const t=tasks.find(x=>x.id===id); if(!t) return;
-  const inp=$(`at-in-${id}`); if(!inp||!inp.value.trim()) return;
-  const email=inp.value.trim();
-  if(!/\S+@\S+/.test(email)){toast('E-mail inválido','ti-alert-circle','var(--red)');return;}
-  t.em=email; inp.value='';
-  renderDetail(); render();
-  toast(`E-mail enviado para ${email}`,'ti-mail','var(--green)');
-}
-function removeAssign(id) {
-  const t=tasks.find(x=>x.id===id); if(!t) return;
-  t.em=''; renderDetail(); render();
+
+async function chgSt(id,val) {
+  const {error}=await sb.from('tarefas').update({st:val}).eq('id',id);
+  if(error){toast('Erro ao salvar','ti-alert-circle','var(--red)');return;}
+  const t=tasks.find(x=>x.id===id); if(t) t.st=val;
+  renderDetail(); render(); toast('Status: '+val,'ti-refresh','var(--accent)');
 }
 
-// ─── NAVIGATION ───
+async function toggleStep(sid,tid) {
+  const s=etapas.find(x=>x.id===sid); if(!s) return;
+  const {error}=await sb.from('etapas').update({dn:!s.dn}).eq('id',sid);
+  if(error){toast('Erro','ti-alert-circle','var(--red)');return;}
+  s.dn=!s.dn; renderDetail(); render();
+}
+
+async function delStep(sid,tid) {
+  await sb.from('etapas').delete().eq('id',sid);
+  etapas=etapas.filter(x=>x.id!==sid); renderDetail();
+}
+
+async function addStep(tid) {
+  const inp=$('step-in'); if(!inp||!inp.value.trim()) return;
+  const txt=inp.value.trim();
+  const ordem=etapas.filter(e=>e.tarefa_id===tid).length;
+  const {data,error}=await sb.from('etapas').insert({tarefa_id:tid,txt,dn:false,ordem}).select().single();
+  if(error||!data){toast('Erro ao salvar etapa','ti-alert-circle','var(--red)');return;}
+  etapas.push(data); inp.value=''; renderDetail(); render();
+}
+
+async function addAssign(id) {
+  const inp=$(`at-${id}`); if(!inp) return;
+  const email=inp.value.trim();
+  if(!/\S+@\S+/.test(email)){toast('E-mail inválido','ti-alert-circle','var(--red)');return;}
+  const {error}=await sb.from('tarefas').update({em:email}).eq('id',id);
+  if(error){toast('Erro ao salvar','ti-alert-circle','var(--red)');return;}
+  const t=tasks.find(x=>x.id===id); if(t) t.em=email;
+  inp.value=''; renderDetail(); render();
+  toast(`Responsável atribuído: ${email}`,'ti-mail','var(--green)');
+}
+
+async function removeAssign(id) {
+  const {error}=await sb.from('tarefas').update({em:''}).eq('id',id);
+  if(error) return;
+  const t=tasks.find(x=>x.id===id); if(t) t.em='';
+  renderDetail(); render();
+}
+
+async function addCmt() {
+  const inp=$('cin'); const txt=inp.value.trim();
+  if(!txt||!selId) return;
+  const {data,error}=await sb.from('comentarios').insert({tarefa_id:selId,autor:'EP',tx:txt}).select().single();
+  if(error||!data){toast('Erro ao salvar comentário','ti-alert-circle','var(--red)');return;}
+  comentarios.push(data); inp.value=''; renderDetail();
+}
+
+// ─── NAV ───
 function go(v) {
   curV=v; curPrj=null;
-  ['inbox','hoje','atras','gantt','kpi','done'].forEach(x=>{ const el=$('n-'+x); if(el) el.classList.toggle('on',x===v); });
+  ['inbox','hoje','atras','gantt','kpi','done'].forEach(x=>{const el=$('n-'+x);if(el)el.classList.toggle('on',x===v);});
   document.querySelectorAll('.proj-row').forEach(el=>el.classList.remove('on'));
-  const titles={inbox:'Caixa de entrada',hoje:'Tarefas de hoje',atras:'Atrasadas',gantt:'Cronograma anual',kpi:'Indicadores de performance',done:'Concluídas'};
+  const titles={inbox:'Caixa de entrada',hoje:'Hoje',atras:'Atrasadas',gantt:'Cronograma anual',kpi:'Indicadores',done:'Concluídas'};
   $('pg-title').textContent=titles[v]||v;
   render();
 }
 function goProj(id) {
   curV='prj'; curPrj=id;
-  ['inbox','hoje','atras','gantt','kpi','done'].forEach(x=>{ const el=$('n-'+x); if(el) el.classList.remove('on'); });
+  ['inbox','hoje','atras','gantt','kpi','done'].forEach(x=>{const el=$('n-'+x);if(el)el.classList.remove('on');});
   const p=projs.find(x=>x.id===id);
   $('pg-title').textContent=p?p.nm:'Projeto';
   render();
 }
 function setLay(l) {
-  curLay=l;
-  $('vt-b').classList.toggle('on',l==='board');
-  $('vt-l').classList.toggle('on',l==='list');
-  render();
+  curLay=l; $('vt-b').classList.toggle('on',l==='board'); $('vt-l').classList.toggle('on',l==='list'); render();
 }
 function doSearch(q){srch=q;render();}
 
@@ -820,8 +748,7 @@ function openMod(type) {
     sel.innerHTML='<option value="">— Sem projeto —</option>'+projs.map(p=>`<option value="${p.id}">${p.nm}</option>`).join('');
     if(curPrj) sel.value=curPrj;
     if(!$('nt-dt').value) $('nt-dt').value=today;
-    modalStepsList=[];
-    $('nt-steps-wrap').innerHTML='';
+    modalStepsList=[]; $('nt-steps-wrap').innerHTML='';
   }
   if(type==='proj'){
     if(!$('np-dt').value) $('np-dt').value=D(90);
@@ -829,36 +756,45 @@ function openMod(type) {
   }
 }
 function closeMod(type){$('ov-'+type).classList.add('hid');}
+
 function addModalStep() {
   const inp=$('nt-step-in'); if(!inp.value.trim()) return;
-  modalStepsList.push({txt:inp.value.trim(),dn:false}); inp.value='';
+  modalStepsList.push(inp.value.trim()); inp.value='';
   $('nt-steps-wrap').innerHTML=modalStepsList.map((s,i)=>`
-    <div style="display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--border)">
-      <i class="ti ti-grip-vertical" style="color:var(--text3);font-size:12px"></i>
-      <span style="flex:1;font-size:11px">${s.txt}</span>
-      <span onclick="modalStepsList.splice(${i},1);addModalStep();addModalStep();" style="cursor:pointer;color:var(--text3);font-size:12px"><i class="ti ti-x"></i></span>
+    <div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--border)">
+      <i class="ti ti-grip-vertical" style="color:var(--text3);font-size:11px"></i>
+      <span style="flex:1;font-size:11px">${s}</span>
+      <span onclick="modalStepsList.splice(${i},1);$('nt-steps-wrap').innerHTML='';modalStepsList.forEach((_,j)=>{});" style="cursor:pointer;color:var(--text3)"><i class="ti ti-x"></i></span>
     </div>`).join('');
 }
-function saveTask() {
-  const nm=$('nt-nm').value.trim(); if(!nm) return;
-  const em=$('nt-em').value.trim();
-  const newT={
-    id:nid++,nm,tp:$('nt-tp').value,pr:$('nt-pr').value,
-    pj:parseInt($('nt-pj').value)||null,eq:$('nt-eq').value,
-    dt:$('nt-dt').value,ds:$('nt-ds').value,
-    em,cv:parseFloat($('nt-cv').value)||0,
-    st:'A fazer',cmts:[],steps:[...modalStepsList]
-  };
-  tasks.push(newT);
-  if(em) { toast(`Tarefa enviada para ${em}`,'ti-mail','var(--green)'); }
+
+async function saveTask() {
+  const nm=$('nt-nm').value.trim(); if(!nm){toast('Informe o título','ti-alert-circle','var(--red)');return;}
+  const pjVal=$('nt-pj').value;
+  const payload={nm,tp:$('nt-tp').value,pr:$('nt-pr').value,pj:pjVal||null,eq:$('nt-eq').value,dt:$('nt-dt').value||null,ds:$('nt-ds').value,em:$('nt-em').value,cv:parseFloat($('nt-cv').value)||0,st:'A fazer'};
+  const {data,error}=await sb.from('tarefas').insert(payload).select().single();
+  if(error||!data){toast('Erro ao criar tarefa','ti-alert-circle','var(--red)');return;}
+  tasks.push(data);
+  // salvar etapas
+  if(modalStepsList.length){
+    const steps=modalStepsList.map((txt,i)=>({tarefa_id:data.id,txt,dn:false,ordem:i}));
+    const {data:sd}=await sb.from('etapas').insert(steps).select();
+    if(sd) etapas.push(...sd);
+  }
   ['nt-nm','nt-ds','nt-em','nt-cv'].forEach(id=>{const el=$(id);if(el)el.value='';});
-  modalStepsList=[];
+  modalStepsList=[]; $('nt-steps-wrap').innerHTML='';
   closeMod('task'); render();
   toast('Tarefa criada!','ti-check','var(--green)');
+  if(payload.em) toast(`Notificação enviada para ${payload.em}`,'ti-mail','var(--accent)');
 }
-function saveProj() {
-  const nm=$('np-nm').value.trim(); if(!nm) return;
-  projs.push({id:npid++,nm,ct:$('np-ct').value,st:$('np-st').value,dt:$('np-dt').value,ds:$('np-ds').value,col:PCOLS[projs.length%PCOLS.length],bgt:parseFloat($('np-bgt').value)||0});
+
+async function saveProj() {
+  const nm=$('np-nm').value.trim(); if(!nm){toast('Informe o nome','ti-alert-circle','var(--red)');return;}
+  const col=PCOLS[projs.length%PCOLS.length];
+  const payload={nm,ct:$('np-ct').value,st:$('np-st').value||null,dt:$('np-dt').value||null,ds:$('np-ds').value,col,bgt:parseFloat($('np-bgt').value)||0};
+  const {data,error}=await sb.from('projetos').insert(payload).select().single();
+  if(error||!data){toast('Erro ao criar projeto','ti-alert-circle','var(--red)');return;}
+  projs.push(data);
   ['np-nm','np-ds','np-bgt'].forEach(id=>{const el=$(id);if(el)el.value='';});
   closeMod('proj'); render();
   toast('Projeto criado!','ti-folder','var(--accent)');
@@ -868,12 +804,13 @@ function saveProj() {
 function toast(msg,icon='ti-check',color='var(--green)') {
   const el=document.createElement('div');
   el.className='toast';
-  el.innerHTML=`<i class="ti ${icon}" style="color:${color}"></i>${msg}`;
+  el.innerHTML=`<i class="ti ${icon}" style="color:${color};font-size:15px"></i>${msg}`;
   $('ta').appendChild(el);
   setTimeout(()=>{el.classList.add('go');setTimeout(()=>el.remove(),300);},3000);
 }
 
-render();
+// INIT
+loadAll();
 </script>
 </body>
 </html>
