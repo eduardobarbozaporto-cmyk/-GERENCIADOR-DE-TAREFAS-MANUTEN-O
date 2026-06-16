@@ -975,51 +975,64 @@ function renderHome(){
   var done=tasks.filter(function(t){return t.st==='Concluído';});
   var soon=open.filter(function(t){return isSoon(t.dt)&&!isLate(t.dt);});
 
-  /* alerts */
   var alerts=[];
   if(late.length){alerts.push({col:'var(--red)',title:late.length+' tarefa(s) com prazo vencido',desc:late.slice(0,2).map(function(t){return t.nm;}).join(', ')+(late.length>2?' e mais...':''),time:'Atenção!'});}
   if(tod.length){alerts.push({col:'var(--amber)',title:tod.length+' tarefa(s) para hoje',desc:tod.slice(0,2).map(function(t){return t.nm;}).join(', ')+(tod.length>2?' e mais...':''),time:'Hoje'});}
-  if(soon.length){alerts.push({col:'var(--accent)',title:soon.length+' tarefa(s) vencendo em breve',desc:soon.slice(0,2).map(function(t){return t.nm+' ('+ BR(t.dt)+')';}).join(', '),time:'Próximos 5 dias'});}
+  if(soon.length){alerts.push({col:'var(--accent)',title:soon.length+' tarefa(s) vencendo em breve',desc:soon.slice(0,2).map(function(t){return t.nm+' ('+BR(t.dt)+')';}).join(', '),time:'Próximos 5 dias'});}
   if(!alerts.length){alerts.push({col:'var(--green)',title:'Tudo em dia!',desc:'Nenhuma tarefa atrasada ou urgente no momento.',time:'Agora'});}
 
-  /* top tasks */
   var topTasks=late.concat(tod).concat(soon).slice(0,5);
   if(!topTasks.length)topTasks=open.slice(0,5);
 
-  _$('content').innerHTML=
-  '<div class="home-wrap">'+
-  '<div class="greeting-card">'+
-  '<div class="greeting-ava" style="background:'+u.color+'">'+u.initials+'</div>'+
-  '<div class="greeting-text"><h2>'+getGreeting()+', '+u.name.split(' ')[0]+'!</h2>'+
-  '<p>'+getDayMsg(u)+'<br><span style="font-size:10px;color:var(--text3)">'+new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</span></p></div>'+
-  '<button class="btn sm" style="margin-left:auto;flex-shrink:0;color:var(--text3)" onclick="doLogout()" title="Sair"><i class="ti ti-logout"></i> Sair</button></div>'+
+  var html='<div class="home-wrap">';
 
-  '<div class="home-grid">'+
-  '<div class="hkpi" onclick="go('inbox')">'+
-  '<div class="hkpi-icon" style="background:var(--acg);color:var(--accent)"><i class="ti ti-inbox"></i></div>'+
-  '<div class="hkpi-val kv-b">'+open.length+'</div><div class="hkpi-lbl">Em aberto</div></div>'+
-  '<div class="hkpi" onclick="go('atras')">'+
-  '<div class="hkpi-icon" style="background:var(--rbg);color:var(--red)"><i class="ti ti-alert-circle"></i></div>'+
-  '<div class="hkpi-val '+( late.length?'kv-r':'kv-g')+'">'+late.length+'</div><div class="hkpi-lbl">Atrasadas</div></div>'+
-  '<div class="hkpi" onclick="go('hoje')">'+
-  '<div class="hkpi-icon" style="background:var(--abg);color:var(--amber)"><i class="ti ti-sun"></i></div>'+
-  '<div class="hkpi-val kv-a">'+tod.length+'</div><div class="hkpi-lbl">Para hoje</div></div>'+
-  '<div class="hkpi" onclick="go('done')">'+
-  '<div class="hkpi-icon" style="background:var(--gbg);color:var(--green)"><i class="ti ti-circle-check"></i></div>'+
-  '<div class="hkpi-val kv-g">'+done.length+'</div><div class="hkpi-lbl">Concluídas</div></div></div>'+
+  html+='<div class="greeting-card">';
+  html+='<div class="greeting-ava" style="background:'+u.color+'">'+u.initials+'</div>';
+  html+='<div class="greeting-text"><h2>'+getGreeting()+', '+u.name.split(' ')[0]+'!</h2>';
+  html+='<p>'+getDayMsg(u)+' <br><span style="font-size:10px;color:var(--text3)">'+new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</span></p></div>';
+  html+='<button class="btn sm" style="margin-left:auto;flex-shrink:0;color:var(--text3)" onclick="doLogout()" title="Sair"><i class="ti ti-logout"></i> Sair</button>';
+  html+='</div>';
 
-  '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'+
-  '<div class="home-sec"><div class="home-sec-title"><i class="ti ti-bell" style="color:var(--amber)"></i>Alertas e avisos</div>'+
-  alerts.map(function(a){return '<div class="alert-item"><div class="alert-dot" style="background:'+a.col+'"></div><div class="alert-body"><div class="alert-title">'+a.title+'</div><div class="alert-desc">'+a.desc+'</div></div><div class="alert-time" style="color:'+a.col+'">'+a.time+'</div></div>';}).join('')+'</div>'+
+  html+='<div class="home-grid">';
+  html+='<div class="hkpi" onclick="go(\'inbox\')">';
+  html+='<div class="hkpi-icon" style="background:var(--acg);color:var(--accent)"><i class="ti ti-inbox"></i></div>';
+  html+='<div class="hkpi-val kv-b">'+open.length+'</div><div class="hkpi-lbl">Em aberto</div></div>';
+  html+='<div class="hkpi" onclick="go(\'atras\')">';
+  html+='<div class="hkpi-icon" style="background:var(--rbg);color:var(--red)"><i class="ti ti-alert-circle"></i></div>';
+  html+='<div class="hkpi-val '+(late.length?'kv-r':'kv-g')+'">'+late.length+'</div><div class="hkpi-lbl">Atrasadas</div></div>';
+  html+='<div class="hkpi" onclick="go(\'hoje\')">';
+  html+='<div class="hkpi-icon" style="background:var(--abg);color:var(--amber)"><i class="ti ti-sun"></i></div>';
+  html+='<div class="hkpi-val kv-a">'+tod.length+'</div><div class="hkpi-lbl">Para hoje</div></div>';
+  html+='<div class="hkpi" onclick="go(\'done\')">';
+  html+='<div class="hkpi-icon" style="background:var(--gbg);color:var(--green)"><i class="ti ti-circle-check"></i></div>';
+  html+='<div class="hkpi-val kv-g">'+done.length+'</div><div class="hkpi-lbl">Concluídas</div></div>';
+  html+='</div>';
 
-  '<div class="home-sec"><div class="home-sec-title"><i class="ti ti-list-check" style="color:var(--accent)"></i>Tarefas prioritárias</div>'+
-  (topTasks.length?topTasks.map(function(t){
-    var m=TMAP[t.tp]||{l:t.tp,c:'tag-impl'};var dc=dCls(t);
-    return'<div class="home-task-item" onclick="selTask('"'+t.id+'"')">'+ 
-    '<div class="prio-dot pd-'+t.pr+'"></div>'+
-    '<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+t.nm+'</div>'+
-    '<div style="display:flex;align-items:center;gap:5px;margin-top:3px"><span class="chip '+m.c+'" style="font-size:9px;padding:1px 5px">'+m.l+'</span><span class="'+dc+'" style="font-size:10px"><i class="ti ti-calendar" style="font-size:9px"></i> '+BR(t.dt)+'</span></div></div></div>';
-  }).join(''):'<div class="empty" style="padding:20px">Nenhuma tarefa prioritária</div>')+'</div></div></div>';
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">';
+
+  html+='<div class="home-sec"><div class="home-sec-title"><i class="ti ti-bell" style="color:var(--amber)"></i>Alertas e avisos</div>';
+  alerts.forEach(function(a){
+    html+='<div class="alert-item"><div class="alert-dot" style="background:'+a.col+'"></div>';
+    html+='<div class="alert-body"><div class="alert-title">'+a.title+'</div><div class="alert-desc">'+a.desc+'</div></div>';
+    html+='<div class="alert-time" style="color:'+a.col+'">'+a.time+'</div></div>';
+  });
+  html+='</div>';
+
+  html+='<div class="home-sec"><div class="home-sec-title"><i class="ti ti-list-check" style="color:var(--accent)"></i>Tarefas prioritárias</div>';
+  if(topTasks.length){
+    topTasks.forEach(function(t){
+      var m=TMAP[t.tp]||{l:t.tp,c:'tag-impl'};var dc=dCls(t);
+      html+='<div class="home-task-item" onclick="selTask(\''+t.id+'\')"><div class="prio-dot pd-'+t.pr+'"></div>';
+      html+='<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+t.nm+'</div>';
+      html+='<div style="display:flex;align-items:center;gap:5px;margin-top:3px"><span class="chip '+m.c+'" style="font-size:9px;padding:1px 5px">'+m.l+'</span>';
+      html+='<span class="'+dc+'" style="font-size:10px"><i class="ti ti-calendar" style="font-size:9px"></i> '+BR(t.dt)+'</span></div></div></div>';
+    });
+  } else {
+    html+='<div class="empty" style="padding:20px">Nenhuma tarefa prioritária</div>';
+  }
+  html+='</div></div></div>';
+
+  _$('content').innerHTML=html;
 }
 
 async function initApp(){
