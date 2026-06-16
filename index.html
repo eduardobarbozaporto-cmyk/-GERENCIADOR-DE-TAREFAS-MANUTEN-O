@@ -176,6 +176,102 @@ textarea.fi{resize:vertical;min-height:60px}
 .hbar-lbl{font-size:11px;color:var(--text2);width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hbar-bg{flex:1;background:var(--bg4);border-radius:3px;height:6px;overflow:hidden}
 .hbar-fg{height:100%;border-radius:3px;transition:width .5s}.hbar-val{font-size:10px;color:var(--text3);width:32px;text-align:right;flex-shrink:0}
+
+/* ── MONTH FILTER ── */
+var curMonth = null; // null = all, 'YYYY-MM' = specific month
+
+var MONTH_NAMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+function getTaskMonth(t){
+  if(!t.dt) return null;
+  return t.dt.substring(0,7); // 'YYYY-MM'
+}
+
+function isRotinaPrj(){
+  if(curV==='prj'&&curPrj){
+    var p=projs.find(function(x){return x.id===curPrj;});
+    return p&&p.folder==='rotina';
+  }
+  return false;
+}
+
+function getLastMonth(){
+  var d=new Date();d.setMonth(d.getMonth()-1);
+  return d.toISOString().substring(0,7);
+}
+
+function getLateFromLastMonth(){
+  var lastM=getLastMonth();
+  return tarefas.filter(function(t){
+    var tm=getTaskMonth(t);
+    return tm===lastM&&t.st!=='Concluído';
+  });
+}
+
+function renderMonthBar(){
+  var wrap=_$('month-bar-wrap');
+  var bar=_$('month-bar');
+  if(!isRotinaPrj()){wrap.style.display='none';return;}
+  wrap.style.display='';
+
+  // Get all months that have tasks in this project
+  var projTasks=tarefas.filter(function(t){return t.pj===curPrj;});
+  var months={};
+  projTasks.forEach(function(t){
+    if(t.dt){
+      var m=t.dt.substring(0,7);
+      if(!months[m])months[m]={total:0,late:0};
+      months[m].total++;
+      if(t.st!=='Concluído'&&t.dt<today)months[m].late++;
+    }
+  });
+
+  // Add current and next month even if empty
+  var now=new Date();
+  for(var i=-1;i<=2;i++){
+    var d=new Date(now.getFullYear(),now.getMonth()+i,1);
+    var key=d.toISOString().substring(0,7);
+    if(!months[key])months[key]={total:0,late:0};
+  }
+
+  var sortedMonths=Object.keys(months).sort();
+  var html='<span style="font-size:10px;font-weight:700;color:var(--text3);white-space:nowrap;flex-shrink:0">Filtrar por mês:</span>';
+  html+='<span class="month-pill'+(curMonth===null?' on':'')+'" onclick="setMonth(null)">Todos</span>';
+  sortedMonths.forEach(function(m){
+    var parts=m.split('-');
+    var lbl=MONTH_NAMES[parseInt(parts[1])-1]+' '+parts[0];
+    var isLate=months[m].late>0;
+    var isCur=curMonth===m;
+    html+='<span class="month-pill'+(isCur?' on':'')+(isLate&&!isCur?' has-late':'')+'" onclick="setMonth(this.dataset.m)" data-m="'+m+'" title="'+months[m].total+' tarefas'+(isLate?' · '+months[m].late+' atrasada(s)':'')+'">';
+    html+=lbl;
+    if(isLate&&!isCur)html+=' <span style="font-size:9px;background:var(--red);color:#fff;border-radius:10px;padding:0 4px;margin-left:2px">'+months[m].late+'</span>';
+    html+='</span>';
+  });
+  bar.innerHTML=html;
+}
+
+function setMonth(m){curMonth=m;render();}
+
+function renderLateMonthAlert(){
+  var late=getLateFromLastMonth();
+  if(!late.length)return'';
+  var lastM=getLastMonth();var parts=lastM.split('-');
+  var lbl=MONTH_NAMES[parseInt(parts[1])-1]+' '+parts[0];
+  var html='<div class="month-alert">';
+  html+='<div class="month-alert-icon"><i class="ti ti-calendar-exclamation"></i></div>';
+  html+='<div class="month-alert-body">';
+  html+='<div class="month-alert-title"><i class="ti ti-alert-triangle"></i> '+late.length+' tarefa(s) pendente(s) de '+lbl+'</div>';
+  html+='<div class="month-alert-desc">As tarefas abaixo ficaram pendentes do periodo anterior:</div>';
+  html+='<ul class="month-alert-list">';
+  late.slice(0,5).forEach(function(t){html+='<li><strong>'+t.nm+'</strong> — <span style="color:var(--red)">'+BR(t.dt)+'</span></li>';});
+  if(late.length>5)html+='<li style="color:var(--text3)">e mais '+(late.length-5)+' tarefa(s)...</li>';
+  html+='</ul></div>';
+  html+='<button class="btn xs" onclick="setMonth(this.dataset.m)" data-m="'+lastM+'" style="flex-shrink:0;align-self:flex-start"><i class="ti ti-arrow-right"></i> Ver</button>';
+  html+='</div>';
+  return html;
+}
+
+
 /* TOAST */
 .toast-area{position:fixed;bottom:16px;right:16px;z-index:2000;display:flex;flex-direction:column;gap:6px;pointer-events:none}
 .toast{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--text);display:flex;align-items:center;gap:8px;min-width:250px;animation:tin .2s ease;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.4)}
@@ -186,6 +282,25 @@ textarea.fi{resize:vertical;min-height:60px}
 .loader-spin{width:36px;height:36px;border:2.5px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty{text-align:center;padding:40px 16px;color:var(--text3)}.empty i{font-size:32px;margin-bottom:10px;display:block;opacity:.25}
+
+/* MONTH FILTER */
+.month-bar{display:flex;align-items:center;gap:6px;padding:10px 18px;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0}
+.month-pill{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);white-space:nowrap;transition:all .12s;flex-shrink:0}
+.month-pill:hover{background:var(--bg4);color:var(--text)}
+.month-pill.on{background:var(--accent);border-color:var(--accent2);color:#fff}
+.month-pill.has-late{border-color:var(--red);color:var(--red)}
+.month-pill.has-late.on{background:var(--red);border-color:var(--red);color:#fff}
+/* LATE MONTH BADGE */
+.late-month-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;background:var(--rbg);color:var(--red);border:1px solid rgba(240,64,96,.3);border-radius:4px;padding:1px 5px}
+/* MONTH ALERT BANNER */
+.month-alert{background:linear-gradient(135deg,var(--rbg),rgba(240,64,96,.05));border:1px solid rgba(240,64,96,.25);border-radius:var(--r);padding:12px 16px;margin-bottom:14px;display:flex;align-items:flex-start;gap:12px}
+.month-alert-icon{width:34px;height:34px;background:var(--rbg);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;color:var(--red);font-size:16px;flex-shrink:0}
+.month-alert-body{flex:1}
+.month-alert-title{font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px}
+.month-alert-desc{font-size:11px;color:var(--text2);line-height:1.5}
+.month-alert-list{margin-top:6px;padding-left:12px}
+.month-alert-list li{font-size:11px;color:var(--text2);margin-bottom:2px}
+
 </style>
 </head>
 <body>
@@ -247,6 +362,7 @@ textarea.fi{resize:vertical;min-height:60px}
       <div class="search-wrap"><i class="ti ti-search" style="font-size:13px;color:var(--text3)"></i><input placeholder="Buscar..." oninput="doSearch(this.value)"></div>
       <button class="btn ac" id="btn-new" onclick="openMod('tarefa')"><i class="ti ti-plus"></i> Nova tarefa</button>
     </div>
+    <div id="month-bar-wrap" style="display:none"><div class="month-bar" id="month-bar"></div></div>
     <div style="display:flex;flex:1;overflow:hidden">
       <div class="content" id="content"></div>
       <div class="detail" id="dp">
@@ -449,11 +565,15 @@ function getFiltered(){
   else if(curV==='done')list=list.filter(function(t){return t.st==='Concluído';});
   else if(curV==='prj')list=list.filter(function(t){return t.pj===curPrj;});
   else list=list.filter(function(t){return t.st!=='Concluído';});
+  // Month filter (only for rotina projects)
+  if(curMonth&&isRotinaPrj()){
+    list=list.filter(function(t){return getTaskMonth(t)===curMonth;});
+  }
   return list;
 }
 
 /* RENDER */
-function render(){updateBadges();renderFolderTree();if(curV==='home'){renderHome();return;}if(curV==='gantt'){renderGantt();return;}if(curV==='kpi'){renderKPI();return;}renderBoard();}
+function render(){updateBadges();renderFolderTree();renderMonthBar();if(curV==='home'){renderHome();return;}if(curV==='gantt'){renderGantt();return;}if(curV==='kpi'){renderKPI();return;}renderBoard();}
 
 function updateBadges(){
   var open=tarefas.filter(function(t){return t.st!=='Concluído';});
@@ -512,7 +632,7 @@ function tCard(t){
     '<span class="chip '+m.c+'" style="font-size:9px;padding:2px 6px">'+m.l+'</span>'+
     (pn?'<span style="display:flex;align-items:center;gap:3px;font-size:10px;color:var(--text2);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><span class="pdot" style="background:'+pn.col+'"></span>'+pn.nm.split('—')[0].trim()+'</span>':'')+
     (t.dt?'<span class="tc-date '+dc+'"><i class="ti '+di+'" style="font-size:10px"></i>'+BR(t.dt)+'</span>':'')+
-    (t.recurrence?'<span style="font-size:10px;color:var(--green)"><i class="ti ti-refresh"></i></span>':'')+
+    (t.recurrence?'<span style="font-size:10px;color:var(--green)"><i class="ti ti-refresh"></i></span>':'')+(getTaskMonth(t)===getLastMonth()&&t.st!=='Concluído'?'<span class="late-month-badge"><i class="ti ti-calendar-exclamation" style="font-size:9px"></i>atrasado</span>':'')+
     '<span style="margin-left:auto;cursor:pointer;color:var(--red);opacity:.5;font-size:11px" onmouseenter="this.style.opacity=1" onmouseleave="this.style.opacity=.5" onclick="event.stopPropagation();askDel(\'tarefa\',\''+t.id+'\',\''+t.nm.replace(/'/g,"\\'")+'\')" title="Excluir"><i class="ti ti-trash"></i></span>'+
     '</div>'+
     (te.length?'<div class="tc-prog"><div class="prog-lbl"><span>'+dn+' de '+te.length+' etapas</span><span>'+prog+'%</span></div><div class="prog-bg"><div class="prog-fg" style="width:'+prog+'%;background:'+(prog===100?'var(--green)':'var(--accent)')+'"></div></div></div>':'')+
@@ -521,7 +641,8 @@ function tCard(t){
 
 function renderBoard(){
   var list=getFiltered();
-  var html='<div class="board">';
+  var alertHtml=renderLateMonthAlert();
+  var html=alertHtml+'<div class="board">';
   ST.forEach(function(col,ci){
     var items=list.filter(function(t){return t.st===col;});
     html+='<div><div class="col-hd"><div class="pdot" style="background:'+ST_DOT[ci]+';width:9px;height:9px;border-radius:50%"></div>';
@@ -556,6 +677,7 @@ function renderHome(){
   html+='<div class="greeting-card"><div class="greeting-ava">'+u.ini+'</div>';
   html+='<div class="greeting-text"><h2>'+getGreeting()+', '+fn+'!</h2><p>'+msg+'<br><span style="font-size:10px;color:var(--text3)">'+new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</span></p></div>';
   html+='<button class="btn sm" style="margin-left:auto;flex-shrink:0" onclick="doLogout()"><i class="ti ti-logout"></i> Sair</button></div>';
+  var lma=renderLateMonthAlert();if(lma)html+=lma;
   html+='<div class="hgrid">';
   html+='<div class="hkpi" onclick="go(\'todas\')"><div class="hkpi-icon" style="background:var(--acg);color:var(--accent)"><i class="ti ti-checklist"></i></div><div class="hkpi-val kv-b">'+open.length+'</div><div class="hkpi-lbl">Em aberto</div></div>';
   html+='<div class="hkpi" onclick="go(\'atras\')"><div class="hkpi-icon" style="background:var(--rbg);color:var(--red)"><i class="ti ti-alert-circle"></i></div><div class="hkpi-val '+(late.length?'kv-r':'kv-g')+'">'+late.length+'</div><div class="hkpi-lbl">Atrasadas</div></div>';
@@ -778,7 +900,7 @@ function go(v){
   render();
 }
 function goProj(id){
-  curV='prj';curPrj=id;
+  curV='prj';curPrj=id;curMonth=null;
   ['home','todas','hoje','atras','gantt','kpi','done'].forEach(function(x){var el=_$('n-'+x);if(el)el.classList.remove('on');});
   var p=projs.find(function(x){return x.id===id;});
   _$('pg-title').textContent=p?p.nm:'Projeto';_$('btn-new').style.display='';render();
@@ -833,6 +955,102 @@ async function saveProj(){
   projs.push(r.data);['np-nm','np-ds','np-bgt'].forEach(function(id){var el=_$(id);if(el)el.value='';});
   closeMod('proj');render();toast('Projeto criado!','ti-folder','var(--accent)');
 }
+
+
+/* ── MONTH FILTER ── */
+var curMonth = null; // null = all, 'YYYY-MM' = specific month
+
+var MONTH_NAMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+function getTaskMonth(t){
+  if(!t.dt) return null;
+  return t.dt.substring(0,7); // 'YYYY-MM'
+}
+
+function isRotinaPrj(){
+  if(curV==='prj'&&curPrj){
+    var p=projs.find(function(x){return x.id===curPrj;});
+    return p&&p.folder==='rotina';
+  }
+  return false;
+}
+
+function getLastMonth(){
+  var d=new Date();d.setMonth(d.getMonth()-1);
+  return d.toISOString().substring(0,7);
+}
+
+function getLateFromLastMonth(){
+  var lastM=getLastMonth();
+  return tarefas.filter(function(t){
+    var tm=getTaskMonth(t);
+    return tm===lastM&&t.st!=='Concluído';
+  });
+}
+
+function renderMonthBar(){
+  var wrap=_$('month-bar-wrap');
+  var bar=_$('month-bar');
+  if(!isRotinaPrj()){wrap.style.display='none';return;}
+  wrap.style.display='';
+
+  // Get all months that have tasks in this project
+  var projTasks=tarefas.filter(function(t){return t.pj===curPrj;});
+  var months={};
+  projTasks.forEach(function(t){
+    if(t.dt){
+      var m=t.dt.substring(0,7);
+      if(!months[m])months[m]={total:0,late:0};
+      months[m].total++;
+      if(t.st!=='Concluído'&&t.dt<today)months[m].late++;
+    }
+  });
+
+  // Add current and next month even if empty
+  var now=new Date();
+  for(var i=-1;i<=2;i++){
+    var d=new Date(now.getFullYear(),now.getMonth()+i,1);
+    var key=d.toISOString().substring(0,7);
+    if(!months[key])months[key]={total:0,late:0};
+  }
+
+  var sortedMonths=Object.keys(months).sort();
+  var html='<span style="font-size:10px;font-weight:700;color:var(--text3);white-space:nowrap;flex-shrink:0">Filtrar por mês:</span>';
+  html+='<span class="month-pill'+(curMonth===null?' on':'')+'" onclick="setMonth(null)">Todos</span>';
+  sortedMonths.forEach(function(m){
+    var parts=m.split('-');
+    var lbl=MONTH_NAMES[parseInt(parts[1])-1]+' '+parts[0];
+    var isLate=months[m].late>0;
+    var isCur=curMonth===m;
+    html+='<span class="month-pill'+(isCur?' on':'')+(isLate&&!isCur?' has-late':'')+'" onclick="setMonth(this.dataset.m)" data-m="'+m+'" title="'+months[m].total+' tarefas'+(isLate?' · '+months[m].late+' atrasada(s)':'')+'">';
+    html+=lbl;
+    if(isLate&&!isCur)html+=' <span style="font-size:9px;background:var(--red);color:#fff;border-radius:10px;padding:0 4px;margin-left:2px">'+months[m].late+'</span>';
+    html+='</span>';
+  });
+  bar.innerHTML=html;
+}
+
+function setMonth(m){curMonth=m;render();}
+
+function renderLateMonthAlert(){
+  var late=getLateFromLastMonth();
+  if(!late.length)return'';
+  var lastM=getLastMonth();var parts=lastM.split('-');
+  var lbl=MONTH_NAMES[parseInt(parts[1])-1]+' '+parts[0];
+  var html='<div class="month-alert">';
+  html+='<div class="month-alert-icon"><i class="ti ti-calendar-exclamation"></i></div>';
+  html+='<div class="month-alert-body">';
+  html+='<div class="month-alert-title"><i class="ti ti-alert-triangle"></i> '+late.length+' tarefa(s) pendente(s) de '+lbl+'</div>';
+  html+='<div class="month-alert-desc">As tarefas abaixo ficaram pendentes do periodo anterior:</div>';
+  html+='<ul class="month-alert-list">';
+  late.slice(0,5).forEach(function(t){html+='<li><strong>'+t.nm+'</strong> — <span style="color:var(--red)">'+BR(t.dt)+'</span></li>';});
+  if(late.length>5)html+='<li style="color:var(--text3)">e mais '+(late.length-5)+' tarefa(s)...</li>';
+  html+='</ul></div>';
+  html+='<button class="btn xs" onclick="setMonth(this.dataset.m)" data-m="'+lastM+'" style="flex-shrink:0;align-self:flex-start"><i class="ti ti-arrow-right"></i> Ver</button>';
+  html+='</div>';
+  return html;
+}
+
 
 /* TOAST */
 function toast(msg,icon,color){
