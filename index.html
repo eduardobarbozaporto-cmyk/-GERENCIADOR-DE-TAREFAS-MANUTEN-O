@@ -404,8 +404,11 @@ async function doLogin(){
 }
 function loginSuccess(email){
   CU=Object.assign({email:email},USERS[email]||{name:email.split('@')[0],role:'Usuário',ini:email.substring(0,2).toUpperCase()});
-  _$('auth-screen').style.display='none';_$('app').style.display='flex';
-  updateUI();loadAll().then(function(){go('home');});
+  _$('loader').style.display='none';
+  _$('auth-screen').style.display='none';
+  _$('app').style.display='flex';
+  updateUI();
+  loadAll().then(function(){go('home');}).catch(function(e){toast('Erro ao carregar: '+e.message,'ti-alert-circle','var(--red)');});
 }
 async function doLogout(){
   await sb.auth.signOut();CU=null;
@@ -846,10 +849,13 @@ async function initApp(){
     if(session.data&&session.data.session){
       loginSuccess(session.data.session.user.email);
     } else {
-      _$('loader').style.display='none';_$('auth-screen').style.display='flex';
+      _$('loader').style.display='none';
+    _$('auth-screen').style.display='flex';
     }
   }catch(e){
-    _$('loader').style.display='none';_$('auth-screen').style.display='flex';
+    console.error('initApp error:',e);
+    _$('loader').style.display='none';
+    _$('auth-screen').style.display='flex';
   }
 }
 
@@ -858,7 +864,19 @@ window.addEventListener('load',function(){
     _$('loader').innerHTML='<div style="color:var(--red);text-align:center;padding:20px;font-size:13px">Biblioteca não carregou.<br><button onclick="location.reload()" style="margin-top:12px;background:var(--accent);border:none;color:#fff;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:12px">Recarregar</button></div>';
     return;
   }
-  initApp();
+  // Timeout: se em 10s ainda carregar, mostra tela de login
+  var timeout=setTimeout(function(){
+    if(_$('loader').style.display!=='none'){
+      _$('loader').style.display='none';
+      _$('auth-screen').style.display='flex';
+    }
+  },10000);
+  initApp().then(function(){clearTimeout(timeout);}).catch(function(e){
+    clearTimeout(timeout);
+    console.error('Init error:',e);
+    _$('loader').style.display='none';
+    _$('auth-screen').style.display='flex';
+  });
 });
 </script>
 </body>
