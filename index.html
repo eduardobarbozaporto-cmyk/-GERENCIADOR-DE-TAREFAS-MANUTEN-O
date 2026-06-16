@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TMN — Gestão de Manutenção</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -335,7 +335,8 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sy
 <script>
 const SUPABASE_URL = 'https://hsyjdvniuhjtcruiedzg.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhzeWpkdm5pdWhqdGNydWllZHpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1OTUyNjgsImV4cCI6MjA5NzE3MTI2OH0.nyzbaLhxVmCny7LKsB8b49-dWhlh7F6Q0QHfj0zJgC4';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const _supa = window.supabase || supabase;
+const sb = _supa.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const $ = id => document.getElementById(id);
 const today = new Date().toISOString().split('T')[0];
