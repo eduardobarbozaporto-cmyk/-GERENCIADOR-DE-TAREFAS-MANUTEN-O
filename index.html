@@ -176,18 +176,74 @@ textarea.fi{resize:vertical;min-height:55px}
 .sec-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:12px}
 .info-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px}
 .info-card-title{font-size:11px;font-weight:600;margin-bottom:10px;color:var(--text);display:flex;align-items:center;gap:6px}
+
+/* ── AUTH ── */
+.auth-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9998;flex-direction:column;gap:0}
+.auth-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(79,124,255,.08) 0%,transparent 60%),radial-gradient(ellipse at 70% 20%,rgba(155,114,245,.06) 0%,transparent 50%)}
+.auth-card{position:relative;width:380px;background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:36px 32px;box-shadow:0 24px 80px rgba(0,0,0,.5)}
+.auth-logo{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:28px}
+.auth-logo-mark{width:56px;height:56px;background:linear-gradient(135deg,#4f7cff,#9b72f5);border-radius:16px;display:flex;align-items:center;justify-content:center}
+.auth-title{font-size:20px;font-weight:800;background:linear-gradient(135deg,#6b93ff,#b89afe);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.5px}
+.auth-sub{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+.auth-welcome{font-size:13px;color:var(--text2);text-align:center;margin-bottom:24px;line-height:1.5}
+.auth-field{margin-bottom:14px}
+.auth-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px;display:block}
+.auth-input{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-family:inherit;font-size:13px;padding:10px 13px;outline:none;transition:border .15s}
+.auth-input:focus{border-color:var(--accent)}
+.auth-btn{width:100%;background:linear-gradient(135deg,#4f7cff,#7c5fdb);border:none;border-radius:var(--r);color:#fff;font-family:inherit;font-size:13px;font-weight:600;padding:12px;cursor:pointer;transition:opacity .15s;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:8px}
+.auth-btn:hover{opacity:.9}.auth-btn:disabled{opacity:.5;cursor:not-allowed}
+.auth-error{background:var(--rbg);border:1px solid rgba(240,64,96,.3);border-radius:var(--rsm);padding:9px 12px;font-size:11px;color:var(--red);margin-bottom:12px;display:none}
+.auth-footer{font-size:10px;color:var(--text3);text-align:center;margin-top:20px}
+/* ── HOME DASHBOARD ── */
+.home-wrap{padding:20px 22px}
+.greeting-card{background:linear-gradient(135deg,rgba(79,124,255,.12) 0%,rgba(155,114,245,.08) 100%);border:1px solid rgba(79,124,255,.2);border-radius:var(--rlg);padding:20px 24px;margin-bottom:18px;display:flex;align-items:center;gap:18px}
+.greeting-ava{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#4f7cff,#9b72f5);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff;flex-shrink:0}
+.greeting-text h2{font-size:18px;font-weight:700;margin-bottom:3px}
+.greeting-text p{font-size:12px;color:var(--text2);line-height:1.5}
+.home-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.hkpi{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;cursor:pointer;transition:all .15s}
+.hkpi:hover{border-color:var(--border2);transform:translateY(-1px)}
+.hkpi-icon{width:32px;height:32px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:8px}
+.hkpi-val{font-size:26px;font-weight:800;line-height:1;margin-bottom:3px}
+.hkpi-lbl{font-size:10px;color:var(--text2)}
+.home-sec{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+.home-sec-title{font-size:12px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px;color:var(--text)}
+.alert-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.alert-item:last-child{border-bottom:none;padding-bottom:0}
+.alert-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.alert-body{flex:1}.alert-title{font-size:12px;font-weight:500;margin-bottom:2px}
+.alert-desc{font-size:11px;color:var(--text2)}
+.alert-time{font-size:10px;color:var(--text3);flex-shrink:0;margin-top:2px}
+.home-task-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s}
+.home-task-item:last-child{border-bottom:none}
+.home-task-item:hover{margin:0 -16px;padding:8px 16px}
+
 </style>
 </head>
 <body>
-<div class="loader" id="loader">
-  <div class="logo-mark" style="width:48px;height:48px;border-radius:14px">
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-    </svg>
-  </div>
+<div id="loader" style="position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:12px">
+  <div class="logo-mark" style="width:48px;height:48px;border-radius:14px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
   <div style="font-size:18px;font-weight:800;background:linear-gradient(135deg,#6b93ff,#b89afe);-webkit-background-clip:text;-webkit-text-fill-color:transparent">TMN</div>
   <div class="loader-spin"></div>
-  <div style="font-size:11px;color:var(--text3)">Carregando sistema...</div>
+  <div style="font-size:11px;color:var(--text3)">Carregando...</div>
+</div>
+
+<!-- AUTH SCREEN -->
+<div class="auth-screen" id="auth-screen" style="display:none">
+  <div class="auth-bg"></div>
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-mark"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+      <div class="auth-title">TMN</div>
+      <div class="auth-sub">Gestão de Manutenção Industrial</div>
+    </div>
+    <div class="auth-welcome" id="auth-welcome">Faça login para continuar</div>
+    <div class="auth-error" id="auth-error"></div>
+    <div class="auth-field"><label class="auth-label">E-mail</label><input class="auth-input" id="auth-email" type="email" placeholder="seu@email.com" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div class="auth-field"><label class="auth-label">Senha</label><input class="auth-input" id="auth-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="auth-btn" id="auth-btn" onclick="doLogin()"><i class="ti ti-login"></i> Entrar no sistema</button>
+    <div class="auth-footer">Tupperware Brasil — Fábrica BR · CC 0450211</div>
+  </div>
 </div>
 
 <div class="shell" id="app" style="display:none">
@@ -203,6 +259,7 @@ textarea.fi{resize:vertical;min-height:55px}
   </div>
   <div class="side-scroll">
     <div class="s-lbl">Menu</div>
+    <div class="nav" id="n-home" onclick="go('home')"><i class="ti ti-home"></i><span class="nav-lbl">Início</span></div>
     <div class="nav on" id="n-inbox" onclick="go('inbox')"><i class="ti ti-inbox"></i><span class="nav-lbl">Caixa de entrada</span><span class="nbadge" id="b-inbox">0</span></div>
     <div class="nav" id="n-hoje" onclick="go('hoje')"><i class="ti ti-sun"></i><span class="nav-lbl">Hoje</span><span class="nbadge am" id="b-hoje" style="display:none">0</span></div>
     <div class="nav" id="n-atras" onclick="go('atras')"><i class="ti ti-alert-circle"></i><span class="nav-lbl">Atrasadas</span><span class="nbadge" id="b-atras" style="display:none">0</span></div>
@@ -214,9 +271,10 @@ textarea.fi{resize:vertical;min-height:55px}
     <div class="add-row" onclick="openMod('proj')"><i class="ti ti-plus"></i> Novo projeto</div>
   </div>
   <div class="side-foot">
-    <div class="user-chip">
+    <div class="user-chip" onclick="doLogout()" title="Sair do sistema">
       <div class="ava">EP</div>
       <div><div class="un">Eduardo Porto</div><div class="ur">Sup. Manutenção</div></div>
+      <i class="ti ti-logout" style="font-size:14px;color:var(--text3);margin-left:auto"></i>
     </div>
   </div>
 </div>
@@ -395,7 +453,7 @@ var folderOpen={};
 var pendingRecurTask=null;
 var pendingStepId=null,pendingStepTid=null;
 
-async function loadAll(){
+async function loadAllData(){
   try{
     var r=await Promise.all([
       sb.from('projetos').select('*').order('created_at'),
@@ -404,7 +462,7 @@ async function loadAll(){
       sb.from('comentarios').select('*').order('created_at')
     ]);
     projs=r[0].data||[];tasks=r[1].data||[];etapas=r[2].data||[];comentarios=r[3].data||[];
-    _$('loader').style.display='none';_$('app').style.display='flex';render();
+    _$('loader').style.display='none';render();
   }catch(e){
     _$('loader').innerHTML='<div style="color:var(--red);text-align:center;padding:20px;font-size:13px">Erro ao conectar.<br><small style="color:var(--text3)">'+e.message+'</small></div>';
   }
@@ -736,14 +794,15 @@ async function addCmt(){
 /* NAV */
 function go(v){
   curV=v;curPrj=null;
-  ['inbox','hoje','atras','gantt','kpi','done'].forEach(function(x){var el=_$('n-'+x);if(el)el.classList.toggle('on',x===v);});
+  ['home','inbox','hoje','atras','gantt','kpi','done'].forEach(function(x){var el=_$('n-'+x);if(el)el.classList.toggle('on',x===v);});
   document.querySelectorAll('.proj-row').forEach(function(el){el.classList.remove('on');});
-  var titles={inbox:'Caixa de entrada',hoje:'Hoje',atras:'Atrasadas',gantt:'Cronograma anual',kpi:'Indicadores de performance',done:'Concluídas'};
+  if(v==='home'){_$('pg-title').textContent='Início';renderHome();return;}
+var titles={inbox:'Caixa de entrada',hoje:'Hoje',atras:'Atrasadas',gantt:'Cronograma anual',kpi:'Indicadores de performance',done:'Concluídas'};
   _$('pg-title').textContent=titles[v]||v;render();
 }
 function goProj(id){
   curV='prj';curPrj=id;
-  ['inbox','hoje','atras','gantt','kpi','done'].forEach(function(x){var el=_$('n-'+x);if(el)el.classList.remove('on');});
+  ['home','inbox','hoje','atras','gantt','kpi','done'].forEach(function(x){var el=_$('n-'+x);if(el)el.classList.remove('on');});
   var p=projs.find(function(x){return x.id===id;});_$('pg-title').textContent=p?p.nm:'Projeto';render();
 }
 function setLay(l){curLay=l;_$('vt-b').classList.toggle('on',l==='board');_$('vt-l').classList.toggle('on',l==='list');render();}
@@ -842,7 +901,147 @@ async function confirmDelete(){
   render();
 }
 
-loadAll();
+
+/* ── USERS (simple config — change password in Supabase Auth) ── */
+var CURRENT_USER = null;
+
+var USERS_CONFIG = {
+  'eduardoporto@tupperware.com.br': {name:'Eduardo Porto',role:'Supervisor de Manutenção',initials:'EP',color:'linear-gradient(135deg,#4f7cff,#9b72f5)'},
+  'rafael.tavares@tupperware.com.br': {name:'Rafael Tavares',role:'Técnico de Segurança',initials:'RT',color:'linear-gradient(135deg,#1db874,#19c4ae)'},
+  'admin@tupperware.com.br': {name:'Administrador',role:'Administrador do Sistema',initials:'AD',color:'linear-gradient(135deg,#e8961f,#f04060)'}
+};
+
+function getGreeting(){
+  var h=new Date().getHours();
+  if(h<12)return'Bom dia';
+  if(h<18)return'Boa tarde';
+  return'Boa noite';
+}
+
+function getDayMsg(u){
+  var open=tasks.filter(function(t){return t.st!=='Concluído';});
+  var late=open.filter(function(t){return isLate(t.dt);});
+  var tod=open.filter(function(t){return t.dt===today;});
+  if(late.length>0) return late.length+' tarefa(s) com prazo vencido. Atenção necessária!';
+  if(tod.length>0) return tod.length+' tarefa(s) para hoje. Bom trabalho!';
+  if(open.length===0) return'Todas as tarefas estão em dia. Excelente!';
+  return open.length+' tarefa(s) em aberto. Tudo sob controle.';
+}
+
+async function doLogin(){
+  var email=_$('auth-email').value.trim();
+  var pass=_$('auth-pass').value;
+  var errEl=_$('auth-error');var btn=_$('auth-btn');
+  if(!email||!pass){errEl.textContent='Preencha e-mail e senha.';errEl.style.display='block';return;}
+  btn.disabled=true;btn.innerHTML='<div class="loader-spin" style="width:18px;height:18px;border-width:2px;margin:0 auto"></div>';
+  errEl.style.display='none';
+  var r=await sb.auth.signInWithPassword({email:email,password:pass});
+  if(r.error){
+    errEl.textContent='E-mail ou senha incorretos.';errEl.style.display='block';
+    btn.disabled=false;btn.innerHTML='<i class="ti ti-login"></i> Entrar no sistema';
+    return;
+  }
+  var uinfo=USERS_CONFIG[email]||{name:email.split('@')[0],role:'Usuário',initials:email.substring(0,2).toUpperCase(),color:'linear-gradient(135deg,#4f7cff,#9b72f5)'};
+  CURRENT_USER={email:email,...uinfo};
+  _$('auth-screen').style.display='none';
+  _$('app').style.display='flex';
+  updateUserUI();
+  await loadAllData();
+  go('home');
+}
+
+async function doLogout(){
+  await sb.auth.signOut();
+  CURRENT_USER=null;
+  _$('app').style.display='none';
+  _$('auth-screen').style.display='flex';
+  _$('auth-email').value='';_$('auth-pass').value='';
+}
+
+function updateUserUI(){
+  if(!CURRENT_USER)return;
+  var uc=document.querySelectorAll('.ava');
+  uc.forEach(function(el){if(!el.classList.contains('ava-sm'))el.textContent=CURRENT_USER.initials;});
+  var un=document.querySelector('.un');if(un)un.textContent=CURRENT_USER.name;
+  var ur=document.querySelector('.ur');if(ur)ur.textContent=CURRENT_USER.role;
+}
+
+function renderHome(){
+  _$('vtog').style.display='none';
+  var u=CURRENT_USER||{name:'Usuário',initials:'??',color:'var(--accent)'};
+  var open=tasks.filter(function(t){return t.st!=='Concluído';});
+  var late=open.filter(function(t){return isLate(t.dt);});
+  var tod=open.filter(function(t){return t.dt===today;});
+  var done=tasks.filter(function(t){return t.st==='Concluído';});
+  var soon=open.filter(function(t){return isSoon(t.dt)&&!isLate(t.dt);});
+
+  /* alerts */
+  var alerts=[];
+  if(late.length){alerts.push({col:'var(--red)',title:late.length+' tarefa(s) com prazo vencido',desc:late.slice(0,2).map(function(t){return t.nm;}).join(', ')+(late.length>2?' e mais...':''),time:'Atenção!'});}
+  if(tod.length){alerts.push({col:'var(--amber)',title:tod.length+' tarefa(s) para hoje',desc:tod.slice(0,2).map(function(t){return t.nm;}).join(', ')+(tod.length>2?' e mais...':''),time:'Hoje'});}
+  if(soon.length){alerts.push({col:'var(--accent)',title:soon.length+' tarefa(s) vencendo em breve',desc:soon.slice(0,2).map(function(t){return t.nm+' ('+ BR(t.dt)+')';}).join(', '),time:'Próximos 5 dias'});}
+  if(!alerts.length){alerts.push({col:'var(--green)',title:'Tudo em dia!',desc:'Nenhuma tarefa atrasada ou urgente no momento.',time:'Agora'});}
+
+  /* top tasks */
+  var topTasks=late.concat(tod).concat(soon).slice(0,5);
+  if(!topTasks.length)topTasks=open.slice(0,5);
+
+  _$('content').innerHTML=
+  '<div class="home-wrap">'+
+  '<div class="greeting-card">'+
+  '<div class="greeting-ava" style="background:'+u.color+'">'+u.initials+'</div>'+
+  '<div class="greeting-text"><h2>'+getGreeting()+', '+u.name.split(' ')[0]+'!</h2>'+
+  '<p>'+getDayMsg(u)+'<br><span style="font-size:10px;color:var(--text3)">'+new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</span></p></div>'+
+  '<button class="btn sm" style="margin-left:auto;flex-shrink:0;color:var(--text3)" onclick="doLogout()" title="Sair"><i class="ti ti-logout"></i> Sair</button></div>'+
+
+  '<div class="home-grid">'+
+  '<div class="hkpi" onclick="go('inbox')">'+
+  '<div class="hkpi-icon" style="background:var(--acg);color:var(--accent)"><i class="ti ti-inbox"></i></div>'+
+  '<div class="hkpi-val kv-b">'+open.length+'</div><div class="hkpi-lbl">Em aberto</div></div>'+
+  '<div class="hkpi" onclick="go('atras')">'+
+  '<div class="hkpi-icon" style="background:var(--rbg);color:var(--red)"><i class="ti ti-alert-circle"></i></div>'+
+  '<div class="hkpi-val '+( late.length?'kv-r':'kv-g')+'">'+late.length+'</div><div class="hkpi-lbl">Atrasadas</div></div>'+
+  '<div class="hkpi" onclick="go('hoje')">'+
+  '<div class="hkpi-icon" style="background:var(--abg);color:var(--amber)"><i class="ti ti-sun"></i></div>'+
+  '<div class="hkpi-val kv-a">'+tod.length+'</div><div class="hkpi-lbl">Para hoje</div></div>'+
+  '<div class="hkpi" onclick="go('done')">'+
+  '<div class="hkpi-icon" style="background:var(--gbg);color:var(--green)"><i class="ti ti-circle-check"></i></div>'+
+  '<div class="hkpi-val kv-g">'+done.length+'</div><div class="hkpi-lbl">Concluídas</div></div></div>'+
+
+  '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'+
+  '<div class="home-sec"><div class="home-sec-title"><i class="ti ti-bell" style="color:var(--amber)"></i>Alertas e avisos</div>'+
+  alerts.map(function(a){return '<div class="alert-item"><div class="alert-dot" style="background:'+a.col+'"></div><div class="alert-body"><div class="alert-title">'+a.title+'</div><div class="alert-desc">'+a.desc+'</div></div><div class="alert-time" style="color:'+a.col+'">'+a.time+'</div></div>';}).join('')+'</div>'+
+
+  '<div class="home-sec"><div class="home-sec-title"><i class="ti ti-list-check" style="color:var(--accent)"></i>Tarefas prioritárias</div>'+
+  (topTasks.length?topTasks.map(function(t){
+    var m=TMAP[t.tp]||{l:t.tp,c:'tag-impl'};var dc=dCls(t);
+    return'<div class="home-task-item" onclick="selTask('"'+t.id+'"')">'+ 
+    '<div class="prio-dot pd-'+t.pr+'"></div>'+
+    '<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+t.nm+'</div>'+
+    '<div style="display:flex;align-items:center;gap:5px;margin-top:3px"><span class="chip '+m.c+'" style="font-size:9px;padding:1px 5px">'+m.l+'</span><span class="'+dc+'" style="font-size:10px"><i class="ti ti-calendar" style="font-size:9px"></i> '+BR(t.dt)+'</span></div></div></div>';
+  }).join(''):'<div class="empty" style="padding:20px">Nenhuma tarefa prioritária</div>')+'</div></div></div>';
+}
+
+async function initApp(){
+  _$('loader').style.display='flex';
+  var session=await sb.auth.getSession();
+  if(session.data&&session.data.session){
+    var email=session.data.session.user.email;
+    var uinfo=USERS_CONFIG[email]||{name:email.split('@')[0],role:'Usuário',initials:email.substring(0,2).toUpperCase(),color:'linear-gradient(135deg,#4f7cff,#9b72f5)'};
+    CURRENT_USER={email:email,...uinfo};
+    _$('loader').style.display='none';
+    _$('app').style.display='flex';
+    updateUserUI();
+    await loadAllData();
+    go('home');
+  } else {
+    _$('loader').style.display='none';
+    _$('auth-screen').style.display='flex';
+  }
+}
+
+
+initApp();
 </script>
 </body>
 </html>
